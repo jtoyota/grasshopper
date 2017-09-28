@@ -1,0 +1,5 @@
+venv/
+database-model/
+user_flow/
+secret.sh
+*.pyc
