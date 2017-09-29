@@ -186,7 +186,7 @@ class Mentorship(db.Model):
     # Define relationship to mentorship type
     mentorship_type = db.relationship("MentorshipType",
                                       backref=db.backref("mentorships",
-                                                         order_by=mentorship_id))
+                                                        order_by=mentorship_id))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
