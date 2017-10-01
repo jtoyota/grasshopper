@@ -2,19 +2,48 @@
 #marinabichoffe hackbright final project
 
 import datetime
+import re
 from sqlalchemy import func
-from model import User, Country, connect_to_db, db
 import datapackage
 import json
 from server import app
+from model import User, Country, Industry, Pets, Hobbies, AreasOfInterest, \
+connect_to_db, db
 
 ##############################################################################
 # Seed database
 
+def load_areas_of_interest():
+    """Load areas of interest for mentorship."""
+
+    f = open("data_source/areas_of_interest")
+    for i, items in enumerate((f), 1):
+        print items
+        #unpack data
+        title, description = items.split("\t")
+
+        area = AreasOfInterest(area_id=i,
+                               title=title,
+                               description=description)
+
+        # add to session
+        db.session.add(area)
+    db.session.commit()
+
+
+def load_user():
+    pass
+
+def load_companies():
+    pass
+
+    # company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    # name = db.Column(db.String(80), nullable=False)
+    # company_type = db.Column(db.String(20))
+
+
 def load_countries():
     """Load list of ISO 3166-1 alpha-2 countries with 2 digit codes to db."""
-
-    print "Countries"
 
     f = open("data_source/countries_json.json")
     dicts = f.read()
@@ -30,39 +59,84 @@ def load_countries():
     # Once we're done, we should commit our work
     db.session.commit()
 
+
 def load_industries():
     """Load list of industry codes as referenced by linkedin."""
 
     f = open("data_source/industry_codes")
 
     for line in f:
-        print line
-        #unpack data 
+        #unpack data
         industry_code, group, description = line.split("\t")
-
+        #industry code included
         industry = Industry(industry_code=industry_code,
                             group=group,
                             description=description)
 
         # add to session
         db.session.add(industry)
-
-
     db.session.commit()
 
 
 def load_pets():
-    pass
+    """Load list of domestic animals."""
+    print "Pets"
+
+    f = open("data_source/pets_list")
+
+    #read file and remove "s" from the end of characters, making it singular
+    for i, line in enumerate((f), 1): # start at id 1
+        line = re.sub(r'(\w*)(s)\b', r'\1', line).lower()
+        pet = Pets(pet_id=i,
+                   species=line)
+         # add to session
+        db.session.add(pet)
+
+    db.session.commit()
 
 
 def load_hobbies():
-    pass
+    """Load list of hobbies grouped by category"""
+
+    f = open("data_source/hobbies", "r")
+    # split text by hobby category
+    text = f.read().split("||")
+    # we will add hobbies as values and groups as keys in this dictionary
+    hobbies_dict = {}
+
+    for hobbies in text:
+        # remove white spaces
+        l = hobbies.split('\n')
+        # set hobby category as key and create empty list
+        hobbies_dict.setdefault(l[0], [])
+        for hobbies in l[1:]:
+            # remove unnecessary characters 
+            hobbies = re.sub(r'(\[\w*\])', r'',hobbies)
+            # add to list
+            if hobbies:
+                hobbies_dict[l[0]].append(hobbies)
+
+    # Each item in the list of hobbies will be added as a new hobby
+    # With the dict key as group
+    for key, value in hobbies_dict.iteritems():
+        for v in value:
+            hobby = Hobbies(group=key,
+                            description=v)
+            db.session.add(hobby)
+
+    db.session.commit()
+
 
 def load_mentorship_types():
+    """Load list of mentorship types."""
+
+    #mentorship_code = db.Column(db.String(4), primary_key=True)
+    #connection_type = db.Column(db.String(40))
+    #mentorship_description = db.Column(db.String(500))
+
+
+def load_events():
     pass
-
-
-
 
 
 if __name__ == "__main__":
@@ -71,3 +145,6 @@ if __name__ == "__main__":
     db.create_all()
     load_countries()
     load_industries()
+    load_pets()
+    load_hobbies()
+    load_areas_of_interest()

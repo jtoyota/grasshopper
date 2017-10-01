@@ -3,3 +3,4 @@ database-model/
 user_flow/
 secret.sh
 *.pyc
+nice_to_have
