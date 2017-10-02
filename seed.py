@@ -6,9 +6,10 @@ import re
 from sqlalchemy import func
 import datapackage
 import json
+from datetime import datetime
 from server import app
 from model import User, Country, Industry, Pets, Hobbies, AreasOfInterest, \
-connect_to_db, db
+    Company, MentorshipType, connect_to_db, db
 
 ##############################################################################
 # Seed database
@@ -32,14 +33,51 @@ def load_areas_of_interest():
 
 
 def load_user():
-    pass
+    """Load mock dataset with user info."""
+
+    f = open("data_source/user_data.txt")
+    # list of users, divided by line:
+    users = f.readlines()
+    # unpack info
+    for user_info in users[1:]:
+
+        user_id, first_name, last_name, email, password, is_mentor, \
+            active_since, country_code, industry_code, num_connections, \
+            summary, picture_url, fun_facts = user_info.split("\t")
+
+        user = User(user_id=user_id,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=password,
+                    is_mentor=is_mentor,
+                    active_since=active_since,
+                    country_code=country_code,
+                    industry_code=industry_code,
+                    num_connections=num_connections,
+                    summary=summary,
+                    picture_url=picture_url,
+                    fun_facts=fun_facts)
+        db.session.add(user)
+    db.session.commit()
+
 
 def load_companies():
-    pass
+    """Load list of mock companies."""
 
-    # company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # name = db.Column(db.String(80), nullable=False)
-    # company_type = db.Column(db.String(20))
+    f = open("data_source/mock_companies.txt")
+
+    companies = f.readlines()
+    # unpack info
+    for comp in companies[1:]:
+        company_id, name, company_type, industry_code = comp.split("\t")
+
+        company = Company(company_id=company_id,
+                          name=name,
+                          company_type=company_type,
+                          industry_code=industry_code.rstrip("\n"))
+        db.session.add(company)
+        db.session.commit()
 
 
 def load_countries():
@@ -47,7 +85,7 @@ def load_countries():
 
     f = open("data_source/countries_json.json")
     dicts = f.read()
-    #decode json file into python list of dictionaries
+    # decode json file into python list of dictionaries
     dicts = json.loads(dicts)
     for d in dicts:
         country = Country(country_code=d['Code'],
@@ -71,7 +109,7 @@ def load_industries():
         #industry code included
         industry = Industry(industry_code=industry_code,
                             group=group,
-                            description=description)
+                            description=description.rstrip('\n'))
 
         # add to session
         db.session.add(industry)
@@ -80,7 +118,6 @@ def load_industries():
 
 def load_pets():
     """Load list of domestic animals."""
-    print "Pets"
 
     f = open("data_source/pets_list")
 
@@ -110,8 +147,8 @@ def load_hobbies():
         # set hobby category as key and create empty list
         hobbies_dict.setdefault(l[0], [])
         for hobbies in l[1:]:
-            # remove unnecessary characters 
-            hobbies = re.sub(r'(\[\w*\])', r'',hobbies)
+            # remove unnecessary characters
+            hobbies = re.sub(r'(\[\w*\])', r'', hobbies)
             # add to list
             if hobbies:
                 hobbies_dict[l[0]].append(hobbies)
@@ -130,10 +167,18 @@ def load_hobbies():
 def load_mentorship_types():
     """Load list of mentorship types."""
 
-    #mentorship_code = db.Column(db.String(4), primary_key=True)
-    #connection_type = db.Column(db.String(40))
-    #mentorship_description = db.Column(db.String(500))
+    f = open("data_source/mentorship_types")
 
+    for line in f:
+        line.strip("\n")
+        mentorship_code, connection_type, mentorship_description = line.split("\t")
+
+        mentorship_type = MentorshipType(mentorship_code=mentorship_code,
+                                         connection_type=connection_type,
+                            mentorship_description=mentorship_description)
+
+        db.session.add(mentorship_type)
+        db.session.commit()
 
 def load_events():
     pass
@@ -143,8 +188,12 @@ if __name__ == "__main__":
     connect_to_db(app)
     db.drop_all()
     db.create_all()
+
     load_countries()
     load_industries()
     load_pets()
     load_hobbies()
     load_areas_of_interest()
+    load_user()
+    load_companies()
+    load_mentorship_types()

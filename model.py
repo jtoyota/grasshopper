@@ -19,17 +19,17 @@ class User(db.Model):
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
     email = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(64), nullable=True)
+    password = db.Column(db.String(64), nullable=False)
     is_mentor = db.Column(db.Boolean, default=False)
     active_since = db.Column(db.DateTime)
-    location = db.Column(db.String(80))
+    location = db.Column(db.String(80), nullable=True)
     country_code = db.Column(db.String(2), db.ForeignKey('countries.country_code'))
     industry_code = db.Column(db.Integer, db.ForeignKey('industries.industry_code'))
     num_connections = db.Column(db.Integer)
     num_connections_capped = db.Column(db.Boolean, default=False)
     summary = db.Column(db.String(2000))
     picture_url = db.Column(db.String(400))
-    fun_facts = db.Column(db.String(600))
+    fun_facts = db.Column(db.String(1000))
 
     # Define relationship to country
     country = db.relationship("Country",
@@ -186,7 +186,7 @@ class Mentorship(db.Model):
     # Define relationship to mentorship type
     mentorship_type = db.relationship("MentorshipType",
                                       backref=db.backref("mentorships",
-                                                        order_by=mentorship_id))
+                                                         order_by=mentorship_id))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -203,7 +203,7 @@ class MentorshipType(db.Model):
 
     __tablename__ = "mentorship_types"
 
-    mentorship_code = db.Column(db.String(4), primary_key=True)
+    mentorship_code = db.Column(db.String(3), primary_key=True)
     connection_type = db.Column(db.String(40))
     mentorship_description = db.Column(db.String(500))
 
