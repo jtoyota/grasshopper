@@ -87,7 +87,7 @@ class AreasOfInterestScore(db.Model):
         """Provide helpful representation when printed."""
         return """<Score score_id={} area_id={} user_id={}
             score={}>""".format(self.score_id, self.area_id,
-                                self.user_id, self.desciption)
+                                self.user_id, self.score)
 
 
 class Country(db.Model):
@@ -228,6 +228,7 @@ class Pets(db.Model):
         return "<Pets pet_id={} species={}".format(self.pet_id,
                                                    self.species)
 
+
 class Position(db.Model):
     """Details about user's current position."""
 
@@ -236,7 +237,7 @@ class Position(db.Model):
     position_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     title = db.Column(db.String(80), nullable=False)
-    summary = db.Column(db.String(500))
+    summary = db.Column(db.String(700))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime, nullable=True)
     is_current = db.Column(db.Boolean)
@@ -337,6 +338,9 @@ class UserPets(db.Model):
     user = db.relationship("User",
                            backref=db.backref("userpets",
                                               order_by=userpets_id))
+    pet = db.relationship("Pets",
+                          backref=db.backref("userpets",
+                                             order_by=userpets_id))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -354,7 +358,7 @@ def connect_to_db(app):
     # Configure to use our PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///grasshopper'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_ECHO'] = False
     db.app = app
     db.init_app(app)
 
