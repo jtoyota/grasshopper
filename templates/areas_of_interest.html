@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Mentor Registration</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery.js"></script>
+  </head>
+
+  <body>
+    
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Grasshopper</h3>
+              <nav class="nav nav-masthead">
+                <a class="nav-link active" href="#">Home</a>
+                <a class="nav-link" href="#">About us</a>
+                <a class="nav-link" href="#">Contact</a>
+              </nav>
+            </div>
+          </div>
+          <div class="inner cover">
+             <!-- this is where we change the h1 depending on session for mentor or mentee  -->
+             <!-- link to formatting lickert scale: https://codepen.io/Buttonpresser/pen/qiuIx -->
+ 
+            <h1 class="cover-heading">
+              <!-- questionnaire on areas of interest -->
+              {% if session['user_type']=='mentor' %}
+                I am an expert on...
+              {% elif session['user_type']=='mentee' %}
+                I'd like to get advice on...
+              {% endif %}
+            </h1>
+            <div class="wrap">
+
+              <form id="areas_of_interest" method="POST">
+                <label class="statement">My Style: Assessing personal presentation, Communicating effectively, Influencing key partners</label>
+                <ul class='likert' id="my_style">
+                  <li>
+                    <input type="radio" name="my_style" value="5">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        I am an expert!
+                      {% elif session['user_type']=='mentee' %}
+                        Very interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_style" value="4">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_style" value="3">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Intermediate
+                      {% elif session['user_type']=='mentee' %}
+                        Interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_style" value="2">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_style" value="1">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Newbie
+                      {% elif session['user_type']=='mentee' %}
+                        Not a priority
+                      {% endif %}
+                  </li>
+                </ul>
+                <label class="statement">My Career : Planning career growth, Navigating goals and strategies, Honing organizational savvy.</label>
+                <ul class='likert' id="my_career">
+                  <li>
+                    <input type="radio" name="my_career" value="5">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        I am an expert!
+                      {% elif session['user_type']=='mentee' %}
+                        Very interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_career" value="4">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_career" value="3">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Intermediate
+                      {% elif session['user_type']=='mentee' %}
+                        Interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_career" value="2">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_career" value="1">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Newbie
+                      {% elif session['user_type']=='mentee' %}
+                        Not a priority
+                      {% endif %}
+                    </label>
+                  </li>
+                </ul>
+                <label class="statement">My Craft: Developing functional / technical skill, Innovating and achieving excellence.</label>
+                <ul class='likert' id="my_craft">
+                  <li>
+                    <input type="radio" name="my_craft" value="5">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        I am an expert!
+                      {% elif session['user_type']=='mentee' %}
+                        Very interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_craft" value="4">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_craft" value="3">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Intermediate
+                      {% elif session['user_type']=='mentee' %}
+                        Interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_craft" value="2">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_craft" value="1">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Newbie
+                      {% elif session['user_type']=='mentee' %}
+                        Not a priority
+                      {% endif %}
+                  </li>
+                </ul>
+                <label class="statement">My Life: Maintaining work/life balance, Managing life changes, Dealing with competing demands.</label>
+                <ul class='likert' id="my_life">
+                  <li>
+                    <input type="radio" name="my_life" value="5">
+                     <label>              
+                      {% if session['user_type']=='mentor' %}
+                        I am an expert!
+                      {% elif session['user_type']=='mentee' %}
+                        Very interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_life" value="4">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_life" value="3">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Intermediate
+                      {% elif session['user_type']=='mentee' %}
+                        Interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_life" value="2">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_life" value="1">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Newbie
+                      {% elif session['user_type']=='mentee' %}
+                        Not a priority
+                      {% endif %}
+                  </li>
+                </ul>
+                <label class="statement">My World: Getting involved in the community, promoting opportunities in business, science, math, etc.</label>
+                <ul class='likert' id="my_world">
+                  <li>
+                    <input type="radio" name="my_world" value="5">
+                     <label>              
+                      {% if session['user_type']=='mentor' %}
+                        I am an expert!
+                      {% elif session['user_type']=='mentee' %}
+                        Very interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_world" value="4">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_world" value="3">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Intermediate
+                      {% elif session['user_type']=='mentee' %}
+                        Interested
+                      {% endif %}
+                    </label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_world" value="2">
+                    <label></label>
+                  </li>
+                  <li>
+                    <input type="radio" name="my_world" value="1">
+                    <label>              
+                      {% if session['user_type']=='mentor' %}
+                        Newbie
+                      {% elif session['user_type']=='mentee' %}
+                        Not a priority
+                      {% endif %}
+                    </label>
+                  </li>
+                </ul>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Continue&raquo;</button>
+          </form>
+            <script src="/static/js/mentor_register.js"></script>
+          </div>
+          <div class="mastfoot">
+            <div class="inner">
+              <p> A Hackbright Project by <a href="https://github.com/mbichoffe">@mbichoffe</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src=""../bootstrap-4.0.0-alpha.6/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="http://getbootstrap.com/assets/js/vendor/popper.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="../static/js/mentor_register.js"></script>
+    
+  </body>
+</html>
