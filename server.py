@@ -18,39 +18,42 @@ app.secret_key = "BURNAFTERREADING"
 def index():
     """Splash page."""
 
-    return render_template("/index.html")
+    return render_template("index.html")
 
 
-@app.route('/about/')
+@app.route('/about')
 def about():
     """Info about the program."""
 
-    return render_template("/about")
+    return render_template("/about.html")
 
-@app.route('/mentor_registration/')
+@app.route('/mentor_registration')
 def mentor_registration():
     session['user_type'] = 'mentor'
     return render_template('mentor_register.html')
 
 
-@app.route('/areas_of_interest/', methods=['POST', 'GET'])
+@app.route('/areas_of_interest', methods=['GET', 'POST'])
+def show_areas_of_interest():
+    """Store areas of interest in session"""
+
+    return render_template('areas_of_interest.html')
+
+@app.route('/areas_of_interest.json', methods=['POST'])
 def get_areas_of_interest():
     """Store areas of interest in session"""
-    if request.method == 'POST':
-        #store in session to add to db later
-        session['areas_of_interest'] = {
-            'my_style': int(request.form.get('my_style')),
-            'my_career': int(request.form.get('my_career')),
-            'my_craft': int(request.form.get('my_life')),
-            'my_world': int(request.form.get('my_world'))
-        }
+
+    #store in session to add to db later
+    session['areas_of_interest'] = {
+        'my_style': int(request.form.get('my_style')),
+        'my_career': int(request.form.get('my_career')),
+        'my_craft': int(request.form.get('my_life')),
+        'my_world': int(request.form.get('my_world'))
+    }
 
     return jsonify(get_hobbies())
 
-
-    return render_template('/areas_of_interest.html')
-
-@app.route('/mentee_registration/')
+@app.route('/mentee_registration')
 def mentee_registration():
     pass
 
@@ -58,8 +61,9 @@ def mentee_registration():
 def get_hobbies():
     """return a list of hobbies"""
 
-    hobbies = Hobbies.query.all()
-    return hobbies
+    hobbies = db.session.query(Hobbies.description)
+    hobbies_list = [h.description for h in hobbies]
+    return hobbies_list
 
 
 
