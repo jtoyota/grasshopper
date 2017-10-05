@@ -139,7 +139,7 @@ class Hobbies(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Hobbies hobby_code={}  group={}
-                description={}""".format(self.hobby_code, self.group,
+                description={}>""".format(self.hobby_code, self.group,
                                          self.description)
 
 

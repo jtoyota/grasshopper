@@ -2,10 +2,11 @@
 # marinabichoffe hackbright final project
 
 from jinja2 import StrictUndefined
+import json
 from flask import Flask, render_template, request, flash, redirect, session, \
     jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from model import * 
+from model import *
 
 app = Flask(__name__)
 
@@ -31,12 +32,21 @@ def mentor_registration():
     session['user_type'] = 'mentor'
     return render_template('mentor_register.html')
 
+
 @app.route('/areas_of_interest/', methods=['POST', 'GET'])
 def get_areas_of_interest():
+    """Store areas of interest in session"""
     if request.method == 'POST':
+        #store in session to add to db later
+        session['areas_of_interest'] = {
+            'my_style': int(request.form.get('my_style')),
+            'my_career': int(request.form.get('my_career')),
+            'my_craft': int(request.form.get('my_life')),
+            'my_world': int(request.form.get('my_world'))
+        }
 
-        inputs = request.form.get('my_style')
-        return "this"
+    return jsonify(get_hobbies())
+
 
     return render_template('/areas_of_interest.html')
 
@@ -44,19 +54,12 @@ def get_areas_of_interest():
 def mentee_registration():
     pass
 
-    # melon = request.form.get('melon_type')
-    # qty = int(request.form.get('qty'))
 
-    # if qty > 10:
-    #     result_code = 'ERROR'
-    #     result_text = "You can't buy more than 10 melons"
-    # elif qty > 0:
-    #     result_code = 'OK'
-    #     result_text = "You have bought %s %s melons" % (qty, melon)
-    # else:
-    #     result_code = 'ERROR'
-    #     result_text = "You want to buy fewer than 1 melons? Huh?"
+def get_hobbies():
+    """return a list of hobbies"""
 
+    hobbies = Hobbies.query.all()
+    return hobbies
 
 
 

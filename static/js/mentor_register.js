@@ -1,23 +1,45 @@
 
 //Function to handle submission of areas of interest questionnaire
 $("#areas_of_interest").on('submit', function(evt) {
-    // debugger;
-    debugger;
     evt.preventDefault();
-
+    //check if user selected all radio buttons;
+    var n = $( "input:checked" ).length;
+    if(n < 5) {
+        alert("Bummer! You forgot to select an option.")
+    };
+    //serialize input to string;
     var formInputs = $("#areas_of_interest").serialize();
-    
     console.log(formInputs);
-    $.post("/areas-of-interest", formInputs, function (results) {
-        console.log("success!")
-        // if (results.code == "OK") {
-        //     $('#order-status').html("<p>" + results.msg + "</p>");
-        // }
-        // else {
-        //     $('#order-status').addClass("order-error");
-        //     $('#order-status').html("<p><b>" + results.msg + "</b></p>");
-        });
+    $.post("/areas_of_interest/", formInputs, function (results) {
+        $(evt.target).remove();
+        //replace headline nafter user clicked on continue
+        console.log(results)
+    });
+    //replace header
+    $(".cover-heading").text("Tell us more about you!");
+    // add 
+    $(".wrap").append('<label>What are some of your favorite hobbies or activities?</label><input type="text" id="hobby_input">');
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // function orderMelons(evt) {
 //     evt.preventDefault();
 
