@@ -53,6 +53,19 @@ def get_areas_of_interest():
 
     return jsonify(get_hobbies())
 
+@app.route('/hobbies_and_pets.json', methods=['POST'])
+def get_areas_of_interest():
+    """Store areas of interest in session"""
+
+    #store in session to add to db later
+    session['hobbies'] = {
+        'my_style': int(request.form.get('my_style')),
+        'my_career': int(request.form.get('my_career')),
+        'my_craft': int(request.form.get('my_life')),
+        'my_world': int(request.form.get('my_world'))
+    }
+
+
 @app.route('/mentee_registration')
 def mentee_registration():
     pass
