@@ -1,8 +1,9 @@
 
 //Function to handle submission of areas of interest questionnaire
  $(document).ready(function(){
-    //html for hobbies questions; hidden until user clicks continue;
+    //html for hobbies questions; hidden until user fills out areas of interest form;
     $("#hobbies").hide();
+
     $("#areas_of_interest").on('submit', function(evt) {
         evt.preventDefault();
         //check if user selected all radio buttons;
@@ -14,13 +15,13 @@
         var formInputs = $("#areas_of_interest").serialize();
         //remove areas of interest questionnaire;
         $("#areas_of_interest_class").remove();
+        //display hobbies form;
         $("#hobbies").show();
-
+        //change title - could be done in the html 
         $(".cover-heading").text("Tell us more about you!");
         
         //autocomplete hobbies and pets
         $.post("/areas_of_interest.json", formInputs, function (results) {
-            console.log(hobbies_list);
             function split( val ) {
                 return val.split( /,\s*/ );
             }
@@ -64,8 +65,23 @@
         //replace header
     });    
     $('#hobbies').on('submit', function(evt){
-    evt.preventDefault();
-    var formInputs = $("#hobbies").serialize();
-
-    });     
+        evt.preventDefault();
+        formInputs = $("#hobby_input").val().split(",");
+        hobbies_list = [];
+        //clear data
+        //loop over list, remove white spaces and duplicates and append to obj
+        formInputs.forEach(function(hobby){
+            if (hobby !== ' ' && !hobbies_list.includes(hobby)) { 
+            hobbies_list.push(hobby);
+            }
+        });  
+        inputsDict = {'hobbies' : hobbies_list.join('|')}  
+        console.log(hobbies_list);
+        console.log(inputsDict);
+        $.post("/hobbies_and_pets.json", inputsDict, function (results) {
+            //do something
+            evt.preventDefault()
+            console.log(results)
+        });     
+    });
 });

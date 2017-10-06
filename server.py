@@ -54,16 +54,14 @@ def get_areas_of_interest():
     return jsonify(get_hobbies())
 
 @app.route('/hobbies_and_pets.json', methods=['POST'])
-def get_areas_of_interest():
+def get_hobbies_and_pets():
     """Store areas of interest in session"""
+    hobbies = request.form.get('hobbies').strip('\n').split(",")
 
+    print hobbies
+    return "success"
     #store in session to add to db later
-    session['hobbies'] = {
-        'my_style': int(request.form.get('my_style')),
-        'my_career': int(request.form.get('my_career')),
-        'my_craft': int(request.form.get('my_life')),
-        'my_world': int(request.form.get('my_world'))
-    }
+
 
 
 @app.route('/mentee_registration')
@@ -78,6 +76,10 @@ def get_hobbies():
     hobbies_list = [h.description for h in hobbies]
     return hobbies_list
 
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
 
 
 # Normally, if you use an undefined variable in Jinja2, it fails silently.
