@@ -19,7 +19,7 @@ class User(db.Model):
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
     email = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(64), nullable=False)
+    password = db.Column(db.String(64), nullable=True)
     is_mentor = db.Column(db.Boolean, default=False)
     active_since = db.Column(db.DateTime)
     location = db.Column(db.String(80), nullable=True)
