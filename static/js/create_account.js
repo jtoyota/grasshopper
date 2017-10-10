@@ -1,11 +1,12 @@
 $(document).ready(function(){
 
-    $("#linkedin").mouseover(function(){
-        $( "#linkedin" )
+    $("#linkedin")
+    .mouseenter(function(){
+        $( this )
         .html('<img src="../static/signin_with_linkedin-buttons/Retina/Sign-In-Small---Active.png">' );
-    }); 
-    $("#linkedin").mouseout(function(){
-        $( "#linkedin" )
+    })
+    .mouseleave(function(){
+        $( this )
         .html('<img src="../static/signin_with_linkedin-buttons/Retina/Sign-In-Small---Default.png">' );
     }); 
 });

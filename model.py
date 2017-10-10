@@ -28,8 +28,9 @@ class User(db.Model):
     num_connections = db.Column(db.Integer)
     num_connections_capped = db.Column(db.Boolean, default=False)
     summary = db.Column(db.String(2000))
+    headline = db.Column(db.String(400))
     picture_url = db.Column(db.String(400))
-    fun_facts = db.Column(db.String(1000))
+    fun_facts = db.Column(db.String(1000), nullable=True)
 
     # Define relationship to country
     country = db.relationship("Country",
@@ -140,7 +141,7 @@ class Hobbies(db.Model):
         """Provide helpful representation when printed."""
         return """<Hobbies hobby_code={}  group={}
                 description={}>""".format(self.hobby_code, self.group,
-                                         self.description)
+                                          self.description)
 
 
 class Industry(db.Model):
@@ -155,7 +156,7 @@ class Industry(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Industry industry_code={} group={}
-        description{}>""".format(self.industry_code,
+        description={}>""".format(self.industry_code,
                                  self.group, self.description)
 
 

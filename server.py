@@ -1,6 +1,8 @@
 # marinabichoffe hackbright final project
 import os
 from pprint import pformat
+from datetime import datetime
+import dateutil
 import requests
 from jinja2 import StrictUndefined
 import json
@@ -26,7 +28,11 @@ STATE = '9493953985'
 
 @app.route('/')
 def index():
-    """Splash page."""
+    """Main page."""
+
+    # if session['user']:
+    #     return render_template("main.html")
+
     return render_template("index.html")
 
 
@@ -40,6 +46,7 @@ def about():
 def mentor_registration():
     """Redirect to mentor ergistration flow."""
     session['user_type'] = 'mentor'
+    session['mentor'] = True
     return render_template('mentor_register.html')
 
 
@@ -115,19 +122,19 @@ def oauth_process():
     if code:
         access_token = get_access_token(code)
 
-
         if access_token:
-            print "access token", access_token
             get_user_data(access_token)
 
     # If there is no access code, flash an error message
     else:
         error_code = request.args.get('error')
         error_description = request.args.get('error_description')
-        print "error"
-        flash('OAuth failed')
 
-    return redirect('/create_account')
+        flash('OAuth failed error: {} {}'.format(error_code, error_description))
+        return redirect('/create_account')
+
+
+    return redirect('/')
 
 
 ######### Helper Functions #########
@@ -186,55 +193,105 @@ def get_user_data(access_token):
 
     headers = {'Authorization': 'Bearer' + access_token}
     user_data = '('\
-    +'first-name,'\
-    +'last-name,'\
-    +'email-address,'\
-    +'headline,'\
-    +'summary,'\
-    +'location,'\
-    +'positions,'\
-    +'picture-urls::(original))'
+                + 'first-name,'\
+                + 'last-name,'\
+                + 'email-address,'\
+                + 'industry,'\
+                + 'headline,'\
+                + 'summary,'\
+                + 'location,'\
+                + 'positions,'\
+                + 'num-connections,'\
+                + 'num-connections-capped,'\
+                + 'picture-urls::(original))'
 
     response = requests.get(LINKEDIN_URL
                             + "/v1/people/~:"
                             + user_data
-                            +"?format=json",
+                            + "?format=json",
                             headers=headers)
     data = response.json()
 
 # If the response was successful (with a status code of less than 400),
-# use the list of events from the returned JSON
+# use the data dict from the returned JSON to create a new user
     if response.ok:
         print data
+        load_user_data(data)
+
 
 # If there was an error (status code between 400 and 600), use an empty list
     else:
-        flash("Error: " + data['message'] + 'status' + data['status'])
+        flash("Error: " + data['message'] + 'status', data['status'])
         user_data = []
-    # Create a dictionary of the events with ids as keys and names as values
-    # events_dict = {}
-    # for event in events:
-    #     event_id = event['id']
-    #     event_name = event['name']['text']
-    #     events_dict[event_id] = event_name
 
-    # return render_template("my-events.html",
-    #                        events=events_dict,
-    #                        data=pformat(data))
-    # payload = {'event_id': event_id}
-    # headers = {'Authorization': 'Bearer ' + access_token}
 
-    # response = requests.post(EVENTBRITE_URL + "users/me/bookmarks/save/",
-    #                          data=payload,
-    #                          headers=headers)
-    # json = response.json()
+def load_user_data(data):
+    """add user data to database."""
 
-    # # If the response was successful and returned JSON has the value True
-    # # for the 'created' key
-    # if response.ok and json['created']:
-    #     flash('Bookmark saved! https://www.eventbrite.com/e/' + event_id)
-    # else:
-    #     flash('Bookmark not saved: ' + json['error_description'])
+    #User info
+    first_name = data['firstName']
+    last_name = data['lastName']
+    email = data['emailAddress']
+    is_mentor = session['mentor']
+    active_since = datetime.now()
+    location = data['location']['name']
+    country_code = (data['location']['country']['code']).upper()
+    industry_code = Industry.query.filter_by(
+        description=data['industry']).first().industry_code
+    num_connections = data['numConnections']
+    num_connections_capped = data['numConnectionsCapped']
+    headline = data['headline']
+    summary = data['summary']
+    picture_url = data['pictureUrls']['values'][0]
+
+    new_user = User(
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        is_mentor=is_mentor,
+        summary=summary,
+        active_since=active_since,
+        location=location,
+        country_code=country_code,
+        industry_code=industry_code,
+        num_connections=num_connections,
+        num_connections_capped=num_connections_capped,
+        headline=headline,
+        picture_url=picture_url)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    flash("User {} added.".format(email))
+    print 'user added'
+    return redirect("/")
+    #missing fun facts
+    #pets
+    #hobbies
+
+    #position
+    #     company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    # name = db.Column(db.String(80), nullable=False)
+    # company_type = db.Column(db.String(20))
+    # industry_code = db.Column(db.Integer,
+    #                           db.ForeignKey('industries.industry_code'))
+
+    # # Define relationship to industry
+    # industry = db.relationship("Industry",
+    #                            backref=db.backref("companies",
+    #                                               order_by=company_id))
+    # position_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    # title = db.Column(db.String(80), nullable=False)
+    # summary = db.Column(db.String(700))
+    # start_date = db.Column(db.DateTime)
+    # end_date = db.Column(db.DateTime, nullable=True)
+    # is_current = db.Column(db.Boolean)
+    # company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'))
+
+
+
+
 
 
 
