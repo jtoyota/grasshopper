@@ -221,7 +221,7 @@ def load_pets():
     for i, line in enumerate((f), 1): # start at id 1
         line = re.sub(r'(\w*)(s)\b', r'\1', line).lower()
         pet = Pets(pet_id=i,
-                   species=line)
+                   species=line.rstrip('\n'))
         # add to session
         db.session.add(pet)
     db.session.commit()
@@ -266,22 +266,88 @@ def set_val_user_id():
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
 
+def set_val_company_id():
+    """Set value for the next company_id after seeding database"""
+
+    # Get the Max user_id in the database
+    result = db.session.query(func.max(Company.company_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('companies_company_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+def set_val_positions_id():
+    """Set value for the next company_id after seeding database"""
+
+    # Get the Max position_id in the database
+    result = db.session.query(func.max(Position.position_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next position_id to be max_id + 1
+    query = "SELECT setval('positions_position_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+def set_val_userhobbies_id():
+    """Set value for the next company_id after seeding database"""
+
+    # Get the Max userhobbies_id in the database
+    result = db.session.query(func.max(UserHobbies.userhobbies_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('userhobbies_userhobbies_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+def set_val_userpets_id():
+    """Set value for the next company_id after seeding database"""
+
+    # Get the Max userhobbies_id in the database
+    result = db.session.query(func.max(UserPets.userpets_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('userpets_userpets_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+def set_val_score_id():
+    """Set value for the next company_id after seeding database"""
+
+    # Get the Max userhobbies_id in the database
+    result = db.session.query(func.max(AreasOfInterestScore.score_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('score_score_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
 if __name__ == "__main__":
     connect_to_db(app)
-    db.drop_all()
-    db.create_all()
+    # load_pets()
+    # db.drop_all()
+    # db.create_all()
 
-    load_countries()
-    load_industries()
-    load_pets()
-    load_hobbies()
-    load_areas_of_interest()
-    load_user()
-    load_companies()
-    load_mentorship_types()
-    load_events()
-    load_positions()
-    load_areas_of_interest_score()
-    load_user_hobbies()
-    load_user_pets()
-    set_val_user_id()
+    # load_countries()
+    # load_industries()
+    # load_pets()
+    # load_hobbies()
+    # load_areas_of_interest()
+    # load_user()
+    # load_companies()
+    # load_mentorship_types()
+    # load_events()
+    # load_positions()
+    # load_areas_of_interest_score()
+    # load_user_hobbies()
+    # load_user_pets()
+    # set_val_user_id()
+    # set_val_company_id()
+    # set_val_positions_id()
+    # set_val_userhobbies_id()
+    set_val_userpets_id()
+    # set_val_score_id()

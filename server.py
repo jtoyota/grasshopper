@@ -3,6 +3,8 @@ import os
 from pprint import pformat
 from datetime import datetime
 import dateutil
+import pytz
+from tzlocal import get_localzone
 import requests
 from jinja2 import StrictUndefined
 import json
@@ -26,12 +28,14 @@ RETURN_URL = 'http://localhost:5000/oauth'
 
 STATE = '9493953985'
 
+TZ = get_localzone()
+
 @app.route('/')
 def index():
     """Main page."""
 
-    # if session['user']:
-    #     return render_template("main.html")
+    if session['user']:
+        return render_template("main.html")
 
     return render_template("index.html")
 
@@ -62,10 +66,10 @@ def get_areas_of_interest():
 
     # store in session to add to db later
     session['areas_of_interest'] = {
-        'my_style': int(request.form.get('my_style')),
-        'my_career': int(request.form.get('my_career')),
-        'my_craft': int(request.form.get('my_life')),
-        'my_world': int(request.form.get('my_world'))
+        'My Style': int(request.form.get('my_style')),
+        'My Career': int(request.form.get('my_career')),
+        'My Craft': int(request.form.get('my_life')),
+        'My World': int(request.form.get('my_world'))
     }
 
     # this dict will be used in autocomplete function in mentor_register.js
@@ -73,18 +77,19 @@ def get_areas_of_interest():
         "hobbies": get_hobbies(),
         "pets": get_pets()
     }
-    print pets_and_hobbies
     return jsonify(pets_and_hobbies)
 
 
 @app.route('/hobbies_and_pets.json', methods=['POST'])
 def get_hobbies_and_pets():
     """Store areas of interest in session."""
-    session['user_hobbies'] = request.form.get('hobbies').strip('\n').split(",")
-    session['user_pets'] = request.form.get('pets').strip('\n').split(",")
+    session['user_hobbies'] = request.form.get('hobbies').strip('\n').split("|")
+    session['user_pets'] = request.form.get('pets').strip('\n').split("|")
 
-    return render_template("/create_account.html")
-
+    if not session['user_hobbies'] and not session['user_pets']:
+        return 'error, try again'
+    print session['user_hobbies'], session['user_pets']
+    return 'ok'
 
 @app.route('/mentee_registration')
 def mentee_registration():
@@ -100,7 +105,6 @@ def create_account():
 @app.route("/register")
 def show_linkedin_registration():
     """Redirect user to LinkedIn's Approve/Deny page"""
-
     return redirect("https://www.linkedin.com/oauth/v2/authorization"
                     + "?response_type=code"
                     + "&client_id=" + LINKEDIN_CLIENT_ID
@@ -114,11 +118,11 @@ def oauth_process():
 
     code = request.args.get('code')
 
-    #for deployment only:
-    #state = request.args.get('state')
+    # for deployment only:
+    # state = request.args.get('state')
     # A value used to test for possible CSRF attacks.
-    #if state != STATE:
-    #throw HTTP 401 error
+    # if state != STATE:
+    # throw HTTP 401 error
     if code:
         access_token = get_access_token(code)
 
@@ -215,7 +219,6 @@ def get_user_data(access_token):
 # If the response was successful (with a status code of less than 400),
 # use the data dict from the returned JSON to create a new user
     if response.ok:
-        print data
         load_user_data(data)
 
 
@@ -226,16 +229,17 @@ def get_user_data(access_token):
 
 
 def load_user_data(data):
-    """add user data to database."""
+    """Add user data to database."""
 
     #User info
     first_name = data['firstName']
     last_name = data['lastName']
     email = data['emailAddress']
     is_mentor = session['mentor']
-    active_since = datetime.now()
+    active_since = datetime.now(TZ)
     location = data['location']['name']
     country_code = (data['location']['country']['code']).upper()
+    #query database for the correspondent industry code 
     industry_code = Industry.query.filter_by(
         description=data['industry']).first().industry_code
     num_connections = data['numConnections']
@@ -243,6 +247,8 @@ def load_user_data(data):
     headline = data['headline']
     summary = data['summary']
     picture_url = data['pictureUrls']['values'][0]
+    #positions is a separate table with user_id as foreign key
+    positions = data.get('positions')
 
     new_user = User(
         first_name=first_name,
@@ -261,33 +267,115 @@ def load_user_data(data):
 
     db.session.add(new_user)
     db.session.commit()
-
+    # Once user is created we can instantiate other classes that require
+    # user_id as foreign key
+    get_user_id(email)
+    # Pass in the information collected from dictionary
+    add_position(positions)
+    #add user's pets and hobbies to db now that we have an user_id
+    add_pets_hobbies()
+    #add user's areas scores to db
+    add_user_scores()
     flash("User {} added.".format(email))
-    print 'user added'
     return redirect("/")
-    #missing fun facts
-    #pets
-    #hobbies
 
-    #position
-    #     company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # name = db.Column(db.String(80), nullable=False)
-    # company_type = db.Column(db.String(20))
-    # industry_code = db.Column(db.Integer,
-    #                           db.ForeignKey('industries.industry_code'))
 
-    # # Define relationship to industry
-    # industry = db.relationship("Industry",
-    #                            backref=db.backref("companies",
-    #                                               order_by=company_id))
-    # position_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    # title = db.Column(db.String(80), nullable=False)
-    # summary = db.Column(db.String(700))
-    # start_date = db.Column(db.DateTime)
-    # end_date = db.Column(db.DateTime, nullable=True)
-    # is_current = db.Column(db.Boolean)
-    # company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'))
+def get_user_id(user_email):
+    """Get user id from db and save in session."""
+    # get user id from database
+    user_id = User.query.filter_by(email=user_email).one().user_id
+
+    session['user_id'] = user_id
+
+
+def add_position(positions):
+    """Add user position to db."""
+    user_id = session['user_id']
+    for position in positions['values']:
+        # search db for company, will return company id
+        company_id = add_or_get_company(position['company'])
+        title = position.get('title')
+        summary = position.get('summary')
+        is_current = position.get('isCurrent')
+        s_month = str(position.get('startDate').get('month'))
+        s_year = str(position.get('startDate').get('year'))
+        start_date = datetime.strptime((s_month + s_year), "%m""%Y")
+        end_date = None
+        # if position isn't current, get end date
+        if position.get('endDate'):
+            e_month = str(position.get('endDate').get('month'))
+            e_year = str(position.get('endDate').get('year'))
+            end_date = datetime.strptime((s_month + s_year), "%m""%Y")
+
+        new_position = Position(
+            user_id=user_id,
+            title=title,
+            summary=summary,
+            is_current=is_current,
+            start_date=start_date,
+            end_date=end_date,
+            company_id=company_id)
+        db.session.add(new_position)
+        db.session.commit()
+
+
+
+def add_or_get_company(company):
+    """Search db for existing company or add new company."""
+    comp = Company.query.filter_by(name=company['name']).first()
+    if comp:
+        return comp.company_id
+    name = company['name']
+    company_type = company['type']
+    # query db for correspondent industry code
+    industry_code = Industry.query.filter_by(
+        description=company['industry']).first().industry_code
+    # add new company to db
+    new_company = Company(
+        name=name,
+        company_type=company_type,
+        industry_code=industry_code)
+    db.session.add(new_company)
+    db.session.commit()
+
+    company = Company.query.filter_by(name=company['name']).first()
+
+    return company.company_id
+
+def add_pets_hobbies():
+    """Add user pets and hobbies to db. """
+    user_id = session['user_id']
+    for pet in session['user_pets']:
+        pet_id = Pets.query.filter_by(species=pet).first().pet_id
+        print 'pet_id', pet_id
+        new_pet = UserPets(
+            user_id=user_id,
+            pet_id=pet_id)
+        db.session.add(new_pet)
+        db.session.commit()
+    #iterate over list of hobbies saved in session and add to db    
+    for hobby in session['user_hobbies']:
+        hobby_code = Hobbies.query.filter_by(
+            description=hobby).first().hobby_code
+        print 'hobby_code', hobby_code
+        new_hobby = UserHobbies(
+            user_id=user_id,
+            hobby_code=hobby_code)
+        db.session.add(new_hobby)
+        db.session.commit()
+
+def add_user_scores():
+    """Add user scores to db."""
+    user_id = session['user_id']
+    for area, score in session['areas_of_interest'].iteritems():
+        area_id = AreasOfInterest.query.filter_by(
+            title=area).first().area_id
+        new_score = AreasOfInterestScore(
+            area_id=area_id,
+            user_id=user_id,
+            score=score)
+        db.session.add(new_score)
+        db.session.commit()
 
 
 

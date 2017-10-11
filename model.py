@@ -21,7 +21,7 @@ class User(db.Model):
     email = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=True)
     is_mentor = db.Column(db.Boolean, default=False)
-    active_since = db.Column(db.DateTime)
+    active_since = db.Column(db.TIMESTAMP)
     location = db.Column(db.String(80), nullable=True)
     country_code = db.Column(db.String(2), db.ForeignKey('countries.country_code'))
     industry_code = db.Column(db.Integer, db.ForeignKey('industries.industry_code'))
@@ -87,8 +87,8 @@ class AreasOfInterestScore(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Score score_id={} area_id={} user_id={}
-            score={}>""".format(self.score_id, self.area_id,
-                                self.user_id, self.score)
+            score={} area={}>""".format(self.score_id, self.area_id,
+                                self.user_id, self.score, self.area)
 
 
 class Country(db.Model):
@@ -102,7 +102,7 @@ class Country(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Country code={}
-        country_name={}>""".format(self.code, self.country_name)
+        country_name={}>""".format(self.country_code, self.country_name)
 
 
 class Company(db.Model):
@@ -112,7 +112,7 @@ class Company(db.Model):
 
     company_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    company_type = db.Column(db.String(20))
+    company_type = db.Column(db.String(60))
     industry_code = db.Column(db.Integer,
                               db.ForeignKey('industries.industry_code'))
 
@@ -123,9 +123,23 @@ class Company(db.Model):
 
     def __repr__(self):
         """Provide helpful representation when printed."""
-        return """< positions_id={} title={}
-        company_id={}>""".format(self.userpositions_id,
-                                 self.user_id, self.positions_id)
+        return """< company_id={} name={}
+        industry={}>""".format(self.company_id,
+                               self.user_id, self.industry)
+
+
+class Events(db.Model):
+    """Types of events."""
+
+    __tablename__ = "events"
+
+    event_code = db.Column(db.String(4), primary_key=True)
+    event_type = db.Column(db.String(50))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        return "<Events event_code={} event_type={}".format(self.event_code,
+                                                            self.event_type)
 
 
 class Hobbies(db.Model):
@@ -256,8 +270,8 @@ class Position(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Position position_id={}  user_id={} title={}
-        company_id={}>""".format(self.position_id, self.user_id, self.title,
-                                 self.company_id)
+        company_id={} company = {}>""".format(self.position_id, self.user_id, self.title,
+                                              self.company_id, self.company)
 
 
 class ScheduledEvents(db.Model):
@@ -288,20 +302,6 @@ class ScheduledEvents(db.Model):
                                                             self.event_code,
                                                             self.title,
                                                             self.date)
-
-
-class Events(db.Model):
-    """Types of events."""
-
-    __tablename__ = "events"
-
-    event_code = db.Column(db.String(4), primary_key=True)
-    event_type = db.Column(db.String(50))
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-        return "<Events event_code={} event_type={}".format(self.event_code,
-                                                            self.event_type)
 
 
 class UserHobbies(db.Model):

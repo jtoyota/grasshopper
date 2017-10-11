@@ -3,6 +3,9 @@
 $(document).ready(function(){
     //html for hobbies questions; hidden until user fills out areas of interest form;
     $("#hobbies_and_pets_class").hide();
+    //html for logging in with linkedin or creating new account with email/password
+    //displayed only at last step;
+    $("#create_account_class").hide();
 
     $("#areas_of_interest").on('submit', function(evt) {
         evt.preventDefault();
@@ -10,6 +13,7 @@ $(document).ready(function(){
         var n = $( "input:checked" ).length;
         if(n < 5) {
             alert("Bummer! You forgot to select an option.")
+            evt.preventDefault();
         };
         //serialize input to string;
         var formInputs = $("#areas_of_interest").serialize();
@@ -107,7 +111,7 @@ $(document).ready(function(){
         //loop over list, remove white spaces and duplicates and push to list
         hobbiesInput.forEach(function(hobby){
             if (hobby !== ' ' && !hobbies_list.includes(hobby)) { 
-            hobbies_list.push(hobby);
+            hobbies_list.push(hobby.trim());
             }        
         });
 
@@ -118,7 +122,7 @@ $(document).ready(function(){
         //loop over list, remove white spaces and duplicates and push to list
         petsInput.forEach(function(pet){
             if (pet !== ' ' && !pets_list.includes(pet)) { 
-            pets_list.push(pet);
+            pets_list.push(pet.trim());
             }        
         });        
         //convert list to string and add to object
@@ -126,9 +130,15 @@ $(document).ready(function(){
             'hobbies' : hobbies_list.join('|'),
             'pets' : pets_list.join('|')
         }  
-        $.post("/hobbies_and_pets.json", inputsDict, function (results) {
+        $.post("/hobbies_and_pets.json", inputsDict).done(function(data){
+            
+        //remove hobbies and pets form;
+        $("#hobbies_and_pets_class").remove();
+        //display create account/log in with linkedin;
+        $("#create_account_class").show();
+        //change title - could be done in the html 
+        $(".cover-heading").text("You're one step away!");
 
-
-        });     
+        });
     });
 });
