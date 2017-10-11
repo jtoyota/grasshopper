@@ -34,7 +34,7 @@ TZ = get_localzone()
 def index():
     """Main page."""
 
-    if session['user']:
+    if session['user_id']:
         return render_template("main.html")
 
     return render_template("index.html")

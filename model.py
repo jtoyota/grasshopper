@@ -1,7 +1,6 @@
 #!/usr/bin/python
 #marinabichoffe hackbright final project
-
-
+import correlation
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -23,8 +22,10 @@ class User(db.Model):
     is_mentor = db.Column(db.Boolean, default=False)
     active_since = db.Column(db.TIMESTAMP)
     location = db.Column(db.String(80), nullable=True)
-    country_code = db.Column(db.String(2), db.ForeignKey('countries.country_code'))
-    industry_code = db.Column(db.Integer, db.ForeignKey('industries.industry_code'))
+    country_code = db.Column(db.String(2),
+                             db.ForeignKey('countries.country_code'))
+    industry_code = db.Column(db.Integer,
+                              db.ForeignKey('industries.industry_code'))
     num_connections = db.Column(db.Integer)
     num_connections_capped = db.Column(db.Boolean, default=False)
     summary = db.Column(db.String(2000))
@@ -47,6 +48,41 @@ class User(db.Model):
         return """<User user_id={} email={}
             is_mentor={}>""".format(self.user_id, self.email, self.is_mentor)
 
+    def similarity(self, other):
+        """Return Pearson rating for user compared to other user."""
+        u_scores = {}
+        paired_scores = []
+
+        # loop through user scores and add to dict, using area_id as key
+        for s in self.scores:
+            u_scores[s.area_id] = s
+
+        # loop through other user ratings, check if area_id matches
+        for s in other.scores:
+            u_s = u_scores.get(s.area_id)
+            if u_s:
+                # put pair of ratings in paired scores list
+                paired_scores.append( (u_s.score, s.score) )
+        # feed pair list to pearson function
+        if paired_scores:
+            return correlation.pearson(paired_scores)
+        else:
+            return 0.0
+
+    def find_matches(self):
+        """Return list of users in decrescent order of pearson correlation to user."""
+        if self.is_mentor:
+            other_users = [ u for u in User.query.filter_by(is_mentor='False') ]
+        else:
+            other_users = [ u for u in User.query.filter_by(is_mentor='True') ]
+
+        similarities = [
+            (self.similarity(other_user), other_user)
+            for other_user in other_users]
+
+        similarities.sort(reverse=True)
+        
+        return similarities
 
 class AreasOfInterest(db.Model):
     """Five "MY" areas of interest for mentors/mentees."""
@@ -87,8 +123,8 @@ class AreasOfInterestScore(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Score score_id={} area_id={} user_id={}
-            score={} area={}>""".format(self.score_id, self.area_id,
-                                self.user_id, self.score, self.area)
+            score={} >""".format(self.score_id, self.area_id, self.user_id,
+                                 self.score)
 
 
 class Country(db.Model):
@@ -124,8 +160,7 @@ class Company(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """< company_id={} name={}
-        industry={}>""".format(self.company_id,
-                               self.user_id, self.industry)
+        industry={}>""".format(self.company_id, self.user_id, self.industry)
 
 
 class Events(db.Model):
@@ -355,7 +390,6 @@ class UserPets(db.Model):
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
-
     # Configure to use our PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///grasshopper'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
