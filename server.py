@@ -35,10 +35,11 @@ def index():
     """Main page."""
 
     if session['user_id']:
-        return render_template("main.html")
+        user = User.query.get(session['user_id']).serialize()
+
+        return render_template("profile.html", user=user)
 
     return render_template("index.html")
-
 
 @app.route('/about')
 def about():
@@ -88,12 +89,7 @@ def get_hobbies_and_pets():
 
     if not session['user_hobbies'] and not session['user_pets']:
         return 'error, try again'
-    print session['user_hobbies'], session['user_pets']
     return 'ok'
-
-@app.route('/mentee_registration')
-def mentee_registration():
-    pass
 
 
 @app.route('/create_account')
@@ -102,7 +98,7 @@ def create_account():
     return render_template("create_account.html")
 
 
-@app.route("/register")
+@app.route('/register')
 def show_linkedin_registration():
     """Redirect user to LinkedIn's Approve/Deny page"""
     return redirect("https://www.linkedin.com/oauth/v2/authorization"
@@ -111,8 +107,18 @@ def show_linkedin_registration():
                     + "&redirect_uri=" + RETURN_URL
                     + "&state=" + STATE)
 
+@app.route('/matches.json')
+def show_matches():
+    """Send dict of matching users."""
+    user = User.query.get(session['user_id'])
+    matches = user.find_matches()
+    user_comp = []
+    for matches in matches[:3]:
+        user_comp.append(matches[1].serialize())
+    return jsonify(user_comp)
 
-@app.route("/oauth")
+
+@app.route('/oauth')
 def oauth_process():
     """Get user data using OAuth"""
 
@@ -138,7 +144,9 @@ def oauth_process():
         return redirect('/create_account')
 
 
-    return redirect('/')
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
 
 
 ######### Helper Functions #########
@@ -167,15 +175,6 @@ def get_access_token(code):
         flash('OAuth failed: ' + json['error_description'])
 
     return access_token
-
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('page_not_found.html'), 404
-
-
-######### Helper Functions #########
-
 
 def get_hobbies():
     """return a list of hobbies"""

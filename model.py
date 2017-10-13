@@ -48,6 +48,34 @@ class User(db.Model):
         return """<User user_id={} email={}
             is_mentor={}>""".format(self.user_id, self.email, self.is_mentor)
 
+
+    def serialize(self):
+
+        return {'first_name': self.first_name,
+                'last_name': self.last_name,
+                'active_since': self.active_since,
+                'is_mentor': self.is_mentor,
+                'location': self.location,
+                'country': self.country.country_name,
+                'summary': self.summary,
+                'picture_url': self.picture_url,
+                'industry': self.industry.description,
+                'fun_facts': self.fun_facts,
+                'positions': {'total': len(self.positions),
+                              'values': [{
+                                         'title': position.title,
+                                         'summary': position.summary,
+                                         'start_date': position.start_date,
+                                         'is_current': position.is_current,
+                                         'end_date': position.end_date,
+                                         'company': position.company.name,
+                                         } for position in self.positions]
+                              },
+                'hobbies': [u.hobby.description for u in self.userhobbies],
+                'pets': [u.pet.species for u in self.userpets],
+                }
+
+
     def similarity(self, other):
         """Return Pearson rating for user compared to other user."""
         u_scores = {}
@@ -70,7 +98,7 @@ class User(db.Model):
             return 0.0
 
     def find_matches(self):
-        """Return list of users in decrescent order of pearson correlation to user."""
+        """Return list of users in decrescent order of pearson correlation."""
         if self.is_mentor:
             other_users = [ u for u in User.query.filter_by(is_mentor='False') ]
         else:
@@ -81,7 +109,7 @@ class User(db.Model):
             for other_user in other_users]
 
         similarities.sort(reverse=True)
-        
+
         return similarities
 
 class AreasOfInterest(db.Model):
@@ -160,7 +188,8 @@ class Company(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """< company_id={} name={}
-        industry={}>""".format(self.company_id, self.user_id, self.industry)
+        industry={}>""".format(self.company_id, self.name,
+                               self.industry.description)
 
 
 class Events(db.Model):
@@ -206,7 +235,7 @@ class Industry(db.Model):
         """Provide helpful representation when printed."""
         return """<Industry industry_code={} group={}
         description={}>""".format(self.industry_code,
-                                 self.group, self.description)
+                                  self.group, self.description)
 
 
 class Mentorship(db.Model):
@@ -216,9 +245,11 @@ class Mentorship(db.Model):
 
     mentorship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     mentorship_code = db.Column(db.String(4),
-                                db.ForeignKey('mentorship_types.mentorship_code'))
+                                db.ForeignKey(
+                                    'mentorship_types.mentorship_code'))
     mentor_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     mentee_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    accepted = db.Column(db.Boolean)
     is_active = db.Column(db.Boolean)
 
     # Define relationship to mentor
@@ -305,10 +336,11 @@ class Position(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Position position_id={}  user_id={} title={}
-        company_id={} company = {}>""".format(self.position_id, self.user_id, self.title,
-                                              self.company_id, self.company)
-
-
+        company_id={} company_name= {}>""".format(self.position_id,
+                                                  self.user_id,
+                                                  self.title,
+                                                  self.company_id,
+                                                  self.company.name)
 class ScheduledEvents(db.Model):
     """Events related to mentorship relationship."""
 
@@ -353,7 +385,9 @@ class UserHobbies(db.Model):
     user = db.relationship("User",
                            backref=db.backref("userhobbies",
                                               order_by=userhobbies_id))
-
+    hobby = db.relationship("Hobbies",
+                            backref=db.backref("userhobbies",
+                                               order_by=userhobbies_id))
     def __repr__(self):
         """Provide helpful representation when printed."""
         return """<Userhobbies userhobbies_id={}  user_id={}

@@ -1,0 +1,25 @@
+Go through each user and find pearson correlation for all 5 areas 
+getting a list of similarities:
+
+if self.is_mentor == True:
+>>>other_users = [ u for u in User.query.filter_by(is_mentor='False') ]
+>>> for other_u in other_users:
+...     print u.similarity(other_u)
+
+Ranking Users:
+
+>>> users = []
+>>> for other_u in other_users:
+...     similarity = u.similarity(other_u)
+...     pair = (similarity, other_u)
+...     users.append(pair)
+
+>>> sorted_users = sorted(users, reverse=True)
+
+>>> top_users = sorted_users[0]
+
+In class attribute:
+
+similarities = [self.similarity(other_user), other user) for other_user in other_users]
+
+similiarities.sort(reverse=True)
