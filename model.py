@@ -73,6 +73,8 @@ class User(db.Model):
                               },
                 'hobbies': [u.hobby.description for u in self.userhobbies],
                 'pets': [u.pet.species for u in self.userpets],
+                'areas_score': [{'title': score.area.title, 'score': score.score} for score in
+                                self.scores]
                 }
 
 
@@ -249,7 +251,6 @@ class Mentorship(db.Model):
                                     'mentorship_types.mentorship_code'))
     mentor_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     mentee_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    accepted = db.Column(db.Boolean)
     is_active = db.Column(db.Boolean)
 
     # Define relationship to mentor

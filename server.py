@@ -34,11 +34,6 @@ TZ = get_localzone()
 def index():
     """Main page."""
 
-    if session['user_id']:
-        user = User.query.get(session['user_id']).serialize()
-
-        return render_template("profile.html", user=user)
-
     return render_template("index.html")
 
 @app.route('/about')
@@ -46,6 +41,13 @@ def about():
     """Info about the program."""
     return render_template("/about.html")
 
+@app.route('/profile')
+def profile():
+    user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
+    session['user_id'] = user_id
+    user = User.query.get(user_id).serialize()
+
+    return render_template("profile.html", user=user)
 
 @app.route('/mentor_registration')
 def mentor_registration():
@@ -69,7 +71,8 @@ def get_areas_of_interest():
     session['areas_of_interest'] = {
         'My Style': int(request.form.get('my_style')),
         'My Career': int(request.form.get('my_career')),
-        'My Craft': int(request.form.get('my_life')),
+        'My Craft': int(request.form.get('my_craft')),
+        'My life': int(request.form.get('my_life')),
         'My World': int(request.form.get('my_world'))
     }
 
@@ -107,14 +110,15 @@ def show_linkedin_registration():
                     + "&redirect_uri=" + RETURN_URL
                     + "&state=" + STATE)
 
+
 @app.route('/matches.json')
 def show_matches():
     """Send dict of matching users."""
     user = User.query.get(session['user_id'])
     matches = user.find_matches()
     user_comp = []
-    for matches in matches[:3]:
-        user_comp.append(matches[1].serialize())
+    for match in matches:
+        user_comp.append(match[1].serialize())
     return jsonify(user_comp)
 
 
@@ -131,7 +135,6 @@ def oauth_process():
     # throw HTTP 401 error
     if code:
         access_token = get_access_token(code)
-
         if access_token:
             get_user_data(access_token)
 
@@ -147,7 +150,9 @@ def oauth_process():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html'), 404
-
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 ######### Helper Functions #########
 def get_access_token(code):
@@ -224,6 +229,7 @@ def get_user_data(access_token):
 # If there was an error (status code between 400 and 600), use an empty list
     else:
         flash("Error: " + data['message'] + 'status', data['status'])
+        print 'error'
         user_data = []
 
 
@@ -275,15 +281,15 @@ def load_user_data(data):
     add_pets_hobbies()
     #add user's areas scores to db
     add_user_scores()
+    print 'user added'
     flash("User {} added.".format(email))
-    return redirect("/")
+    return redirect("/profile")
 
 
 def get_user_id(user_email):
     """Get user id from db and save in session."""
     # get user id from database
     user_id = User.query.filter_by(email=user_email).one().user_id
-
     session['user_id'] = user_id
 
 
@@ -318,7 +324,6 @@ def add_position(positions):
         db.session.commit()
 
 
-
 def add_or_get_company(company):
     """Search db for existing company or add new company."""
     comp = Company.query.filter_by(name=company['name']).first()
@@ -346,7 +351,6 @@ def add_pets_hobbies():
     user_id = session['user_id']
     for pet in session['user_pets']:
         pet_id = Pets.query.filter_by(species=pet).first().pet_id
-        print 'pet_id', pet_id
         new_pet = UserPets(
             user_id=user_id,
             pet_id=pet_id)
@@ -356,7 +360,6 @@ def add_pets_hobbies():
     for hobby in session['user_hobbies']:
         hobby_code = Hobbies.query.filter_by(
             description=hobby).first().hobby_code
-        print 'hobby_code', hobby_code
         new_hobby = UserHobbies(
             user_id=user_id,
             hobby_code=hobby_code)
@@ -375,9 +378,6 @@ def add_user_scores():
             score=score)
         db.session.add(new_score)
         db.session.commit()
-
-
-
 
 
 

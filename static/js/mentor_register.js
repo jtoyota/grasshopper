@@ -43,7 +43,7 @@ $(document).ready(function(){
                 }
             })
             .autocomplete({
-                minLength: 0,
+                minLength: 3,
                 source: function( request, response ) {
                 // delegate back to autocomplete, but extract the last term
                 response( $.ui.autocomplete.filter(
