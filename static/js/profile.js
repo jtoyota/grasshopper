@@ -3,12 +3,19 @@ $(document).ready(function(){
         evt.preventDefault();
     });
 
+    //convert user score to percentage to be displayed in progress bar
     Handlebars.registerHelper('percent', function(score){
       score = (score*100)/5
       return new Handlebars.SafeString(
       'style="width:'
       + score
       + '%"');
+    });
+
+
+    Handlebars.registerHelper('randompic', function(profile_pic){
+
+        return 'https://source.unsplash.com/featured/640x480?dog'
     });
         
 
@@ -34,7 +41,7 @@ $(document).ready(function(){
                         'summary': data[i]['positions']['values'][0]['summary'],
                         'industry': data[i]['industry'],
                         'country': data[i]['country'],
-                        'picture_url': 'https://loremflickr.com/320/240/dog',
+                        'picture_url': 'data[i][picture_url]',
                         'hobbies': data[i]['hobbies'],
                         'pets': data[i]['pets'],
                                 

@@ -252,6 +252,7 @@ class Mentorship(db.Model):
     mentor_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     mentee_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     is_active = db.Column(db.Boolean)
+    accepted_request = db.Column(db.Boolean, default=False)
 
     # Define relationship to mentor
     mentor = db.relationship("User",

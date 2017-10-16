@@ -330,7 +330,7 @@ if __name__ == "__main__":
     connect_to_db(app)
     # load_pets()
     # db.drop_all()
-    # db.create_all()
+    db.create_all()
 
     # load_countries()
     # load_industries()
@@ -349,5 +349,5 @@ if __name__ == "__main__":
     # set_val_company_id()
     # set_val_positions_id()
     # set_val_userhobbies_id()
-    set_val_userpets_id()
+    # set_val_userpets_id()
     # set_val_score_id()

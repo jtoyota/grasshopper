@@ -36,25 +36,11 @@ def index():
 
     return render_template("index.html")
 
+
 @app.route('/about')
 def about():
     """Info about the program."""
     return render_template("/about.html")
-
-@app.route('/profile')
-def profile():
-    user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
-    session['user_id'] = user_id
-    user = User.query.get(user_id).serialize()
-
-    return render_template("profile.html", user=user)
-
-@app.route('/mentor_registration')
-def mentor_registration():
-    """Redirect to mentor ergistration flow."""
-    session['user_type'] = 'mentor'
-    session['mentor'] = True
-    return render_template('mentor_register.html')
 
 
 @app.route('/areas_of_interest', methods=['GET', 'POST'])
@@ -66,7 +52,6 @@ def show_areas_of_interest():
 @app.route('/areas_of_interest.json', methods=['POST'])
 def get_areas_of_interest():
     """Store areas of interest in session."""
-
     # store in session to add to db later
     session['areas_of_interest'] = {
         'My Style': int(request.form.get('my_style')),
@@ -84,6 +69,12 @@ def get_areas_of_interest():
     return jsonify(pets_and_hobbies)
 
 
+@app.route('/create_account')
+def create_account():
+    """Render first time sign in page."""
+    return render_template("create_account.html")
+
+
 @app.route('/hobbies_and_pets.json', methods=['POST'])
 def get_hobbies_and_pets():
     """Store areas of interest in session."""
@@ -95,20 +86,12 @@ def get_hobbies_and_pets():
     return 'ok'
 
 
-@app.route('/create_account')
-def create_account():
-    """Render first time sign in page."""
-    return render_template("create_account.html")
-
-
-@app.route('/register')
-def show_linkedin_registration():
-    """Redirect user to LinkedIn's Approve/Deny page"""
-    return redirect("https://www.linkedin.com/oauth/v2/authorization"
-                    + "?response_type=code"
-                    + "&client_id=" + LINKEDIN_CLIENT_ID
-                    + "&redirect_uri=" + RETURN_URL
-                    + "&state=" + STATE)
+@app.route('/mentor_registration')
+def mentor_registration():
+    """Redirect to mentor ergistration flow."""
+    session['user_type'] = 'mentor'
+    session['mentor'] = True
+    return render_template('mentor_register.html')
 
 
 @app.route('/matches.json')
@@ -150,9 +133,26 @@ def oauth_process():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html'), 404
-@app.route('/test')
-def test():
-    return render_template('test.html')
+
+
+@app.route('/profile')
+def profile():
+    user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
+    session['user_id'] = user_id
+    user = User.query.get(user_id).serialize()
+
+    return render_template("profile.html", user=user)
+
+
+@app.route('/register')
+def show_linkedin_registration():
+    """Redirect user to LinkedIn's Approve/Deny page."""
+    return redirect("https://www.linkedin.com/oauth/v2/authorization"
+                    + "?response_type=code"
+                    + "&client_id=" + LINKEDIN_CLIENT_ID
+                    + "&redirect_uri=" + RETURN_URL
+                    + "&state=" + STATE)
+
 
 ######### Helper Functions #########
 def get_access_token(code):
