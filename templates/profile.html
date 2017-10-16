@@ -318,7 +318,10 @@
       </li>
       <li class="nav-item ml-2">
         <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover">
-          <img class="rounded-circle" src="../assets/img/avatar-dhg.png">
+          <img class="rounded-circle" src=
+          {%if user['picture_url'] %}
+          {{ user['picture_url'] }}>
+          {% endif %}
         </button>
       </li>
     </ul>
@@ -398,7 +401,7 @@
             </li>            
           </ul>          
           <div class="card-body text-left">
-            <h6 class="mb-3 icon icon-quote mr-3"> In {{ first_name }}'s words</h6></span>
+            <span><h6 class="mb-3 icon icon-quote mr-3"> In {{ first_name }}'s words</h6></span>
             <p class="mb-4">{{ summary }}</p>
           </div>
           <div class="row">
@@ -425,10 +428,11 @@
                     </div>
                   </div>
               {{/areas_score}}
-            </ul>
-          </div>  
+              </ul>
+            </div>  
           </div>
         </div>
+      </div>
       <div class="card d-md-block d-lg-block mb-4">
         <div class="card-body">
           <h6 class="mb-3">More about <a href="#">{{ first_name }}</a></h6>
@@ -471,11 +475,13 @@
             </ul>
         </div>
       </div>
-            {{/each}}
+      {{/each}}
       {% endraw %}
       </script>
       <div class="content-placeholder"></div>
-
+      <p id="loading" style="display: none; text-align: center;">
+          <img src="../static/images/Ripple.gif" alt="Loading…" />
+      </p>
 </div>
 
     <script src="http://code.jquery.com/jquery.js"></script>
@@ -488,6 +494,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/handlebars-intl@1.1.2/dist/handlebars-intl.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/jscroll/2.3.9/jquery.jscroll.js></script>
     <script>
       // execute/clear BS loaders for docs
       $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})

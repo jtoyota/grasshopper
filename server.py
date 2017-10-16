@@ -30,6 +30,8 @@ STATE = '9493953985'
 
 TZ = get_localzone()
 
+PER_PAGE = 10
+
 @app.route('/')
 def index():
     """Main page."""
@@ -93,16 +95,43 @@ def mentor_registration():
     session['mentor'] = True
     return render_template('mentor_register.html')
 
+@app.route('/total_rows.json')
+def get_total_rows_matches():
+    """Return total number of matches for a given user."""
+    return len(get_matches())
 
+@app.route('/matches.json/page/<int:page>')
 @app.route('/matches.json')
-def show_matches():
+def show_matches(page=1):
     """Send dict of matching users."""
+    count = len(get_matches())
+
+    users = get_matches_for_page(page, PER_PAGE, count)
+    pagination = Pagination(page, PER_PAGE, count)
+    print pagination.page
+    return jsonify(users)
+
+
+def get_matches_for_page(page, PER_PAGE, count):
+    """return matches per page."""
+    matches = get_matches()
+
+    n = 0
+    if page == 1:
+        return matches[0:PER_PAGE]
+
+    return matches[PER_PAGE*page:(PER_PAGE*page)+PER_PAGE]
+
+
+def get_matches():
+    """return list of matches."""
     user = User.query.get(session['user_id'])
     matches = user.find_matches()
     user_comp = []
     for match in matches:
         user_comp.append(match[1].serialize())
-    return jsonify(user_comp)
+
+    return user_comp
 
 
 @app.route('/oauth')
