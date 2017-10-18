@@ -71,10 +71,10 @@ def get_areas_of_interest():
     return jsonify(pets_and_hobbies)
 
 
-@app.route('/create_account')
-def create_account():
+@app.route('/login')
+def login():
     """Render first time sign in page."""
-    return render_template("create_account.html")
+    return render_template("login.html")
 
 
 @app.route('/hobbies_and_pets.json', methods=['POST'])
@@ -88,17 +88,68 @@ def get_hobbies_and_pets():
     return 'ok'
 
 
+@app.route('/home')
+def main_page():
+    """Render user's main page."""
+    user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
+    session['user_id'] = user_id
+    user = User.query.get(user_id).serialize()
+    return render_template("home.html", user=user)
+
+@app.route('/request_connection', methods=['POST'])
+def make_request():
+    """create a mentorship on db with pending status."""
+
+    requester = session['user_id']
+    mentorship_code = 'one' # setting one-on-one as default for now
+    if session['mentor']:
+        mentor_id = session['user_id']
+        mentee_id = int(request.form.get('user_id'))
+    elif session['mentee']:
+        mentee_id = session['user_id']
+        mentor_id = request.form.get('user_id')
+
+    new_mentorship = Mentorship(mentorship_code=mentorship_code,
+                                mentor_id=mentor_id,
+                                mentee_id=mentee_id,
+                                requester=requester)
+    db.session.add(new_mentorship)
+    db.session.commit()
+    print new_mentorship
+
+
+@app.route('/connection_requests/<status>')
+def show_pending_requests(status=all):
+    """return json file of all pending requests."""
+    requester = session['user_id']
+    requests = []
+    if session['mentor']:
+            requests_query = Mentorship.query.options(
+                db.joinedload('mentee')).filter_by(mentor_id=requester,
+                                                   accepted_request='False').all()
+    elif session['mentee']:
+        requests_query = Mentorship.query.options(
+            db.joinedload('mentee')).filter_by(mentee_id=requester,
+                                               accepted_request='False').all()
+
+    for r in requests_query:
+        req_info = {}
+        req_info['mentorship_id'] = r.mentorship_id
+        req_info['mentee_info'] = r.mentee.serialize()
+        requests.append(req_info)
+
+
+    return jsonify(requests)
+
+
 @app.route('/mentor_registration')
 def mentor_registration():
     """Redirect to mentor ergistration flow."""
     session['user_type'] = 'mentor'
     session['mentor'] = True
+
     return render_template('mentor_register.html')
 
-@app.route('/total_rows.json')
-def get_total_rows_matches():
-    """Return total number of matches for a given user."""
-    return len(get_matches())
 
 @app.route('/matches.json/page/<int:page>')
 @app.route('/matches.json')
@@ -111,27 +162,10 @@ def show_matches(page=1):
     print pagination.page
     return jsonify(users)
 
-
-def get_matches_for_page(page, PER_PAGE, count):
-    """return matches per page."""
-    matches = get_matches()
-
-    n = 0
-    if page == 1:
-        return matches[0:PER_PAGE]
-
-    return matches[PER_PAGE*page:(PER_PAGE*page)+PER_PAGE]
-
-
-def get_matches():
-    """return list of matches."""
-    user = User.query.get(session['user_id'])
-    matches = user.find_matches()
-    user_comp = []
-    for match in matches:
-        user_comp.append(match[1].serialize())
-
-    return user_comp
+@app.route('/notifications')
+def show_notifications():
+    """render notifications page."""
+    return render_template("notifications.html") 
 
 
 @app.route('/oauth')
@@ -149,6 +183,13 @@ def oauth_process():
         access_token = get_access_token(code)
         if access_token:
             get_user_data(access_token)
+            return redirect("/profile")
+
+        error_code = request.args.get('error')
+        error_description = request.args.get('error_description')
+
+        flash('OAuth failed error: {} {}'.format(error_code, error_description))
+        return redirect('/create_account')
 
     # If there is no access code, flash an error message
     else:
@@ -166,6 +207,7 @@ def page_not_found(error):
 
 @app.route('/profile')
 def profile():
+    """Render user profile's main page."""
     user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
     session['user_id'] = user_id
     user = User.query.get(user_id).serialize()
@@ -182,6 +224,14 @@ def show_linkedin_registration():
                     + "&redirect_uri=" + RETURN_URL
                     + "&state=" + STATE)
 
+@app.route('/search')
+def search_for_users():
+    pass
+
+@app.route('/total_rows.json')
+def get_total_rows_matches():
+    """Return total number of matches for a given user."""
+    return len(get_matches())
 
 ######### Helper Functions #########
 def get_access_token(code):
@@ -311,8 +361,6 @@ def load_user_data(data):
     #add user's areas scores to db
     add_user_scores()
     print 'user added'
-    flash("User {} added.".format(email))
-    return redirect("/profile")
 
 
 def get_user_id(user_email):
@@ -407,6 +455,27 @@ def add_user_scores():
             score=score)
         db.session.add(new_score)
         db.session.commit()
+
+
+def get_matches_for_page(page, PER_PAGE, count):
+    """return matches per page."""
+    matches = get_matches()
+
+    if page == 1:
+        return matches[0:PER_PAGE]
+
+    return matches[PER_PAGE*page:(PER_PAGE*page)+ PER_PAGE]
+
+
+def get_matches():
+    """return list of matches."""
+    user = User.query.get(session['user_id'])
+    matches = user.find_matches()
+    user_comp = []
+    for match in matches:
+        user_comp.append(match[1].serialize())
+
+    return user_comp
 
 
 

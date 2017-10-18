@@ -10,6 +10,10 @@
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="../static/css/toolkit.css" rel="stylesheet">
+    
+    <link href="../static/css/application.css" rel="stylesheet">
   </head>
 
   <body>
@@ -33,7 +37,7 @@
           <div class="inner cover">
              <!-- this is where we change the h1 depending on session for mentor or mentee  -->
              <!-- link to formatting lickert scale: https://codepen.io/Buttonpresser/pen/qiuIx -->
-              <h1 class="cover-heading">
+              <h1 class="cover-heading" style="text-align : center">
                 <!-- questionnaire on areas of interest -->
                 {% if session['user_type']=='mentor' %}
                   I am an expert on...
@@ -257,8 +261,35 @@
                 </form>
               </div>
               <div class="wrap" id="create_account_class">
-                <a href="/register" id="linkedin"><img src="../static/signin_with_linkedin-buttons/Retina/Sign-In-Small---Default.png">
-                </a>
+                <div class="container-fluid container-fill-height">
+                    <div class="container-content-middle">
+                      <form role="form" class="mx-auto text-center app-login-form">
+                        <div class="form-group">
+                          <input class="form-control" placeholder="Email">
+                        </div>
+                        <div class="form-group mb-3">
+                          <input type="password" class="form-control" placeholder="Password">
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" style="text-align: left"> Remember me
+                              </input>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="mb-5">
+                          <button class="btn btn-primary btn-lg">Sign up</button>
+                        </div>
+                              <p class=text-muted>or</p><br>
+                              <a href="/register" id="linkedin"><img src="../static/signin_with_linkedin-buttons/Retina/Sign-In-Small---Default.png">
+                              </a>
+                        </div>
+                        <footer class="screen-login">
+                        </footer>
+                      </form>
+                    </div>
+                  </div>
             </div>     
         </div>
         <div class="mastfoot">

@@ -52,7 +52,8 @@ class User(db.Model):
 
     def serialize(self):
 
-        return {'first_name': self.first_name,
+        return {'user_id': self.user_id,
+                'first_name': self.first_name,
                 'last_name': self.last_name,
                 'active_since': self.active_since,
                 'is_mentor': self.is_mentor,
@@ -253,7 +254,9 @@ class Mentorship(db.Model):
     mentor_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     mentee_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     is_active = db.Column(db.Boolean)
+    requester = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     accepted_request = db.Column(db.Boolean, default=False)
+    mentorship_start_date = db.Column(db.TIMESTAMP)
 
     # Define relationship to mentor
     mentor = db.relationship("User",

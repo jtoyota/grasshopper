@@ -1,7 +1,10 @@
 $(document).ready(function(){
+    //mentees - best matches 
     $('#user-matches').on('click', function(evt){
         evt.preventDefault();
     });
+
+
 
     //convert user score to percentage to be displayed in progress bar
     Handlebars.registerHelper('percent', function(score){
@@ -12,14 +15,12 @@ $(document).ready(function(){
       + '%"');
     });
 
-
-
     if($('#user-matches').hasClass('active')) {
         //if session with user matches is selected on profile page
         //display matches 
-        var count = 1 // page index for pagination
-        console.log(count)
-        getMatches(count)//
+        var count = 1; // page index for pagination
+        console.log(count);
+        getMatches(count);//
         var win = $(window);
         var isActive = false;
         // Each time the user scrolls
@@ -29,9 +30,10 @@ $(document).ready(function(){
                 isActive = true; //avoid multiple calls due to bouncing
                 $('#loading').show();
                 count +=1;
+                console.log(count)
                 getMatches(count);
-                $('#loading').hide();
                 isActive = false;
+                $('#loading').hide();
             }
         });    
 
@@ -39,11 +41,10 @@ $(document).ready(function(){
             $.get('/matches.json/page/'+count.toString(), function(data){
                 var source = $("#match-template").html();
                 var template = Handlebars.compile(source);
-                var user_info = data;
-                console.log(user_info)
                 var user_data = []; //json file from server serialize function
                 for (var i = 0; i < data.length; i++) {
                     user_data.push ({
+                            'user_id': data[i]['user_id'],
                             'areas_score': data[i]['areas_score'],
                             'first_name': data[i]['first_name'],
                             'last_name': data[i]['last_name'],
@@ -56,30 +57,16 @@ $(document).ready(function(){
                             'country': data[i]['country'],
                             'picture_url': 'data[i][picture_url]',
                             'hobbies': data[i]['hobbies'],
-                            'pets': data[i]['pets'],
-                                    
+                            'pets': data[i]['pets'],                
                     });
                 }    
             var compiledHtml = template(user_data)
             // Add the compiled html to the page
-            $('.content-placeholder').append(compiledHtml);
+            $('.content-placeholder').append(compiledHtml);    
             });
-        }
 
-        function initPageNumbers() {
-            //Get total rows number
-
-            $.get('/total_rows.json', function (data){
-                total_rows = parseInt(data.total_rows);
-            })
-            //Loop through every available page and output a page link
-            var count = 1;
-            var rows_per_page = 10;//PER_PAGE var in server.py
-
-
-        }
-        var num = "1";
-
-
+        };
+    
     };
-});        
+
+    });
