@@ -92,7 +92,7 @@
             </a>
             <a href="#" class="list-group-item list-group-item-action">
               <div class="media">
-                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dog-in-glasses-1.jpg">
+                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dogs-in-glasses-1.jpg">
                 <div class="media-body">
                   <strong>Mark Otto</strong> and <strong>3 others</strong>
                   <div class="media-body-secondary">
@@ -184,7 +184,7 @@
               </li>
 
               <li class="media mb-4">
-                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dog-in-glasses-1.jpg">
+                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dogs-in-glasses-1.jpg">
                 <div class="media-body">
                   <div class="media-body-text">
                    Etiam porta sem malesuada magna mollis euismod. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.
@@ -235,7 +235,7 @@
               </li>
 
               <li class="media mb-4">
-                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dog-in-glasses-1.jpg">
+                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dogs-in-glasses-1.jpg">
                 <div class="media-body">
                   <div class="media-body-text">
                    Etiam porta sem malesuada magna mollis euismod. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.
@@ -377,10 +377,13 @@
   </nav>
 </div>
 <div class="container pt-4 pb-5">
-
-      {% raw %}
+  <div class="content-placeholder"></div>
+  <p id="loading" style="display: none; text-align: center;">
+    <img src="../static/images/Ripple.gif" alt="Loading…" />
+  </p>
+  {% raw %}
       <!--Data will be inserted in its according place, replacing the brackets.-->
-<script id="match-template" type="text/x-handlebars-template">
+  <script id="match-template" type="text/x-handlebars-template">
       {{#each this}}
       <div class="card card-profile mb-4" id='matches-profile'>
         <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
@@ -388,7 +391,7 @@
           <a href="profile/index.html">
             <img
               class="card-profile-img"
-              src="http://loremflickr.com/320/240/dog?random">
+              src={{picture_url}}>
           </a>
           <h5 class="card-title">
             <a class="text-inherit" href="profile/index.html">{{ first_name }} {{ last_name }}</a>
@@ -457,7 +460,6 @@
               {{/with}}
             </li>
           </ul>
-          <button class='button'>this</button>
           <div class="nav btn-block">
                 <div class="btn">
                 <button class="btn btn-outline-primary btn-lg {{@index}}" data-userid="{{user_id}}" onclick="getConnectionId({{@index}})">
@@ -483,12 +485,8 @@
       {{/each}}
       {% endraw %}
       </script>
-      <div class="content-placeholder"></div>
-        <p id="loading" style="display: none; text-align: center;">
-        <img src="../static/images/Ripple.gif" alt="Loading…" />
-      </p>
     </div>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://getbootstrap.com/assets/js/vendor/popper.min.js"></script>
     <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
@@ -497,8 +495,7 @@
     <script src="../static/js/chart.js"></script>
     <script src="../static/js/toolkit.js"></script>
     <script src="../static/js/application.js"></script>
-    <script src="../static/js/profile.js"></script>
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
         function showResults(results){
           console.log(results);
         }
@@ -509,9 +506,8 @@
             console.log(user_id)
             $.post('/request_connection',user_id, showResults)
         }
-        // document.getElementsByClassName('btn-1').addEventListener("click",console.log("this works"))
-
-      </script>
+      </script> -->
+    <script src="../static/js/profile.js"></script>
     <script>
       // execute/clear BS loaders for docs
       $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})

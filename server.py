@@ -44,6 +44,54 @@ def about():
     """Info about the program."""
     return render_template("/about.html")
 
+@app.route('/connection_requests/<status>.json')
+def show_pending_requests(status='pending_requests'):
+    """return json file of all pending requests."""
+    print status
+    requester = session['user_id']
+    requests = []
+    if status == 'pending_requests':
+        if session['mentor']:
+            requests_query = Mentorship.query.options(
+            db.joinedload('mentee')).filter_by(mentor_id=requester,
+                                                       accepted_request='False').all()
+        elif session['mentee']:
+            requests_query = Mentorship.query.options(
+                db.joinedload('mentee')).filter_by(mentee_id=requester,
+                                                   accepted_request='False').all()
+    elif status == 'sent_requests':
+        if session['mentor']:
+                requests_query = Mentorship.query.options(
+                    db.joinedload('mentee')).filter_by(mentor_id=requester,
+                                                       accepted_request='False').all()
+        elif session['mentee']:
+            requests_query = Mentorship.query.options(
+                db.joinedload('mentee')).filter_by(mentee_id=requester,
+                                                   accepted_request='False').all()
+    else:
+        return flash('invalid request')
+        print session['mentor'], session['is_mentor']
+
+    for r in requests_query:
+        req_info = {}
+        req_info['mentorship_id'] = r.mentorship_id
+        req_info['mentee_info'] = r.mentee.serialize()
+        requests.append(req_info)
+
+    return jsonify(requests)
+
+@app.route('/accept_request/')
+def accept():
+    """Activate mentorship on db."""
+    mentorship_id = request.args.get('mentorship_id')
+    mentorship = Mentorship.query.get(mentorship_id)
+    if mentorship:
+        mentorship.is_active=True
+        mentorship.accept_request=True
+        mentorship.start_date=datetime.utcnow().isoformat() + 'Z'# 'Z' indicates UTC time
+        db.session.commit()
+        return 'Request accepted'
+    return none
 
 @app.route('/areas_of_interest', methods=['GET', 'POST'])
 def show_areas_of_interest():
@@ -94,6 +142,7 @@ def main_page():
     user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
     session['user_id'] = user_id
     user = User.query.get(user_id).serialize()
+
     return render_template("home.html", user=user)
 
 @app.route('/request_connection', methods=['POST'])
@@ -118,30 +167,6 @@ def make_request():
     print new_mentorship
 
 
-@app.route('/connection_requests/<status>')
-def show_pending_requests(status=all):
-    """return json file of all pending requests."""
-    requester = session['user_id']
-    requests = []
-    if session['mentor']:
-            requests_query = Mentorship.query.options(
-                db.joinedload('mentee')).filter_by(mentor_id=requester,
-                                                   accepted_request='False').all()
-    elif session['mentee']:
-        requests_query = Mentorship.query.options(
-            db.joinedload('mentee')).filter_by(mentee_id=requester,
-                                               accepted_request='False').all()
-
-    for r in requests_query:
-        req_info = {}
-        req_info['mentorship_id'] = r.mentorship_id
-        req_info['mentee_info'] = r.mentee.serialize()
-        requests.append(req_info)
-
-
-    return jsonify(requests)
-
-
 @app.route('/mentor_registration')
 def mentor_registration():
     """Redirect to mentor ergistration flow."""
@@ -158,14 +183,15 @@ def show_matches(page=1):
     count = len(get_matches())
 
     users = get_matches_for_page(page, PER_PAGE, count)
+    print count, page, users
     pagination = Pagination(page, PER_PAGE, count)
-    print pagination.page
+    print pagination
     return jsonify(users)
 
 @app.route('/notifications')
 def show_notifications():
     """render notifications page."""
-    return render_template("notifications.html") 
+    return render_template("notifications.html")
 
 
 @app.route('/oauth')
@@ -234,6 +260,8 @@ def get_total_rows_matches():
     return len(get_matches())
 
 ######### Helper Functions #########
+
+
 def get_access_token(code):
     """Use access code to request user's access token"""
 
@@ -463,6 +491,7 @@ def get_matches_for_page(page, PER_PAGE, count):
 
     if page == 1:
         return matches[0:PER_PAGE]
+
 
     return matches[PER_PAGE*page:(PER_PAGE*page)+ PER_PAGE]
 

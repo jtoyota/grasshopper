@@ -34,7 +34,7 @@
 
   </head>
 
-
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 <body class="with-top-navbar">
   
 
@@ -126,7 +126,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-fat.jpg">
                 <div class="media-body">
-                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <strong>Wonder Woman</strong> and <strong>1 other</strong>
                   <div class="media-body-secondary">
                     Aenean eu leo quam. Pellentesque ornare sem lacinia quam &hellip;
                   </div>
@@ -137,7 +137,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-mdo.png">
                 <div class="media-body">
-                  <strong>Mark Otto</strong> and <strong>3 others</strong>
+                  <strong>Balloonicorn</strong> and <strong>3 others</strong>
                   <div class="media-body-secondary">
                     Brunch sustainable placeat vegan bicycle rights yeah…
                   </div>
@@ -159,7 +159,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-fat.jpg">
                 <div class="media-body">
-                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <strong>Wonder Woman</strong> and <strong>1 other</strong>
                   <div class="media-body-secondary">
                     Aenean eu leo quam. Pellentesque ornare sem lacinia quam &hellip;
                   </div>
@@ -170,7 +170,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-mdo.png">
                 <div class="media-body">
-                  <strong>Mark Otto</strong> and <strong>3 others</strong>
+                  <strong>Balloonicorn</strong> and <strong>3 others</strong>
                   <div class="media-body-secondary">
                     Brunch sustainable placeat vegan bicycle rights yeah…
                   </div>
@@ -192,7 +192,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-fat.jpg">
                 <div class="media-body">
-                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <strong>Wonder Woman</strong> and <strong>1 other</strong>
                   <div class="media-body-secondary">
                     Aenean eu leo quam. Pellentesque ornare sem lacinia quam &hellip;
                   </div>
@@ -203,7 +203,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-mdo.png">
                 <div class="media-body">
-                  <strong>Mark Otto</strong> and <strong>3 others</strong>
+                  <strong>Balloonicorn</strong> and <strong>3 others</strong>
                   <div class="media-body-secondary">
                     Brunch sustainable placeat vegan bicycle rights yeah…
                   </div>
@@ -270,7 +270,7 @@
                   </div>
                   <div class="media-footer">
                     <small class="text-muted">
-                      <a href="#">Mark Otto</a> at 4:20PM
+                      <a href="#">Balloonicorn</a> at 4:20PM
                     </small>
                   </div>
                 </div>
@@ -321,7 +321,7 @@
                   </div>
                   <div class="media-footer">
                     <small class="text-muted">
-                      <a href="#">Mark Otto</a> at 4:20PM
+                      <a href="#">Balloonicorn</a> at 4:20PM
                     </small>
                   </div>
                 </div>
@@ -352,7 +352,7 @@
                   <button class="btn btn-secondary btn-sm float-right">
                     <span class="glyphicon glyphicon-user"></span> Follow
                   </button>
-                  <strong>Jacob Thornton</strong>
+                  <strong>Wonder Woman</strong>
                   <p>@fat - San Francisco</p>
                 </div>
               </div>
@@ -376,7 +376,7 @@
                   <button class="btn btn-secondary btn-sm float-right">
                     <span class="glyphicon glyphicon-user"></span> Follow
                   </button>
-                  <strong>Mark Otto</strong>
+                  <strong>Balloonicorn</strong>
                   <p>@mdo - San Francisco</p>
                 </div>
               </div>
@@ -420,16 +420,12 @@
           <ul class="card-menu">
             <li class="card-menu-item">
               <a href="#userModal" class="text-inherit" data-toggle="modal">
-                Friends
-                <h6 class="my-0">12M</h6>
-              </a>
-            </li>
-
-            <li class="card-menu-item">
-              <a href="#userModal" class="text-inherit" data-toggle="modal">
-                Enemies
-                <h6 class="my-0">
-                </h6>
+                {%if user['is_mentor'] %}
+                Mentees
+                {% else %}
+                Mentors
+                {% endif %}
+                <h6 class="my-0">3</h6>
               </a>
             </li>
           </ul>
@@ -451,7 +447,7 @@
 
        <div class="card d-md-block d-lg-block mb-4">
         <div class="card-body">
-          <h6 class="mb-3">Photos <small>· <a href="#">Edit</a></small></h6>
+          <h6 class="mb-3">Upcoming Events <small>· <a href="#">Edit</a></small></h6>
           <div data-grid="images" data-target-height="150">
             <div>
               <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_5.jpg">
@@ -485,17 +481,29 @@
 
       <ul class="list-group media-list media-list-stream mb-4">
 
-        <li class="media list-group-item p-4">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Message">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-secondary align-self-stretch">
-                <span class="icon icon-camera"></span>
-              </button>
-            </div>
-          </div>
+        <li class="media list-group-item p-4">         
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <span class="icon icon-chat"></span>
+                Discussions
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span class="icon icon-bell"></span>
+                Notifications
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span class="icon icon-users"></span>
+                Members
+              </a>
+            </li>
+          </ul>
         </li>
-
+        
         <li class="media list-group-item p-4">
           <img
             class="media-object d-flex align-self-start mr-3"
@@ -534,7 +542,7 @@
                   class="media-object d-flex align-self-start mr-3"
                   src="assets/img/avatar-fat.jpg">
                 <div class="media-body">
-                  <strong>Jacon Thornton: </strong>
+                  <strong>Doggo: </strong>
                   Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.
                 </div>
               </li>
@@ -543,7 +551,7 @@
                   class="media-object d-flex align-self-start mr-3"
                   src="assets/img/avatar-mdo.png">
                 <div class="media-body">
-                  <strong>Mark Otto: </strong>
+                  <strong>Balloonicorn: </strong>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
                 </div>
               </li>
@@ -559,7 +567,7 @@
             <div class="media-body-text">
               <div class="media-heading">
                 <small class="float-right text-muted">12 min</small>
-                <h6>Jacob Thornton</h6>
+                <h6>Wonder Woman</h6>
               </div>
               <p>
                 Donec id elit non mi porta gravida at eget metus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -575,7 +583,7 @@
           <div class="media-body">
             <div class="media-heading">
               <small class="float-right text-muted">34 min</small>
-              <h6>Mark Otto</h6>
+              <h6>Balloonicorn</h6>
             </div>
 
             <p>
@@ -604,60 +612,58 @@
     <div class="col-lg-3">
       <div class="alert alert-warning alert-dismissible d-none d-lg-block" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <a class="alert-link" href="/profile">Visit your profile!</a> Check your self, you aren't looking well.
+        <a class="alert-link" href="/profile">Visit your profile!</a> .
       </div>
 
       <div class="card mb-4 d-none d-lg-block">
         <div class="card-body">
-          <h6 class="mb-3">Sponsored</h6>
+          <h6 class="mb-3">Suggested Mentees</h6>
           <div data-grid="images" data-target-height="150">
             <img class="media-object" data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_2.jpg">
           </div>
-          <p><strong>It might be time to visit Iceland.</strong> Iceland is so chill, and everything looks cool here. Also, we heard the people are pretty nice. What are you waiting for?</p>
-          <button class="btn btn-outline-primary btn-sm">Buy a ticket</button>
+          <p><strong>You are an awesome mentor.</strong>This is a placeholder text
+          for something</p>
+          <button class="btn btn-outline-primary btn-sm">Action item</button>
         </div>
       </div>
 
       <div class="card mb-4 d-none d-lg-block">
         <div class="card-body">
-        <h6 class="mb-3">Likes <small>· <a href="#">View All</a></small></h6>
-        <ul class="media-list media-list-stream">
-          <li class="media mb-2">
-            <img
-              class="media-object d-flex align-self-start mr-3"
-              src="assets/img/avatar-fat.jpg">
-            <div class="media-body">
-              <strong>Jacob Thornton</strong> @fat
-              <div class="media-body-actions">
-                <button class="btn btn-outline-primary btn-sm">
-                  <span class="icon icon-add-user"></span> Follow</button>
-              </div>
-            </div>
-          </li>
-           <li class="media">
-            <a class="media-left" href="#">
-              <img
-                class="media-object d-flex align-self-start mr-3"
-                src="assets/img/avatar-mdo.png">
-            </a>
-            <div class="media-body">
-              <strong>Mark Otto</strong> @mdo
-              <div class="media-body-actions">
-                <button class="btn btn-outline-primary btn-sm">
-                  <span class="icon icon-add-user"></span> Follow</button></button>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <h6 class="mb-3">
+            Connection requests
+            <small>· <a href="#">View All</a></small></h6>
+            <div class="content-placeholder"></div>
         </div>
-        <div class="card-footer">
-          Dave really likes these nerds, no one knows why though.
-        </div>
-      </div>
 
+              {% raw %}
+      <!--Data will be inserted in its according place, replacing the brackets.-->
+            <script id="match-template" type="text/x-handlebars-template">
+              {{#each this}}
+              <ul id=connection_requests class="media-list media-list-stream">
+                <li class="media mb-2">
+                  <img
+                    class="media-object d-flex align-self-start mr-3"
+                    src={{picture_url}}>
+                  <div class="media-body">
+                    <strong>{{ first_name }} {{ last_name }}</strong>
+                    <span class="text-muted">
+                    </span>{{title}} at <a href="#">{{company}}</a>
+                    <div class="media-body-actions">
+                      <button class="btn btn-outline-primary btn-sm {{@index}}" data-mentorship-id="{{mentorship_id}}" onclick="getConnectionId({{@index}})">
+                        <span class="icon icon-add-user"></span>Accept</button>
+                    </div>
+                  </div>
+              </ul>
+      {{/each}}
+      </script> 
+      {% endraw %}
+        <div class="card-footer">
+          Make the most of your mentorship with our <a href="#">resources</a>
+        </div>
+  </div>
       <div class="card card-link-list">
         <div class="card-body">
-          © 2018 Bootstrap
+          Marina Bichoffe Project
           <a href="#">About</a>
           <a href="#">Help</a>
           <a href="#">Terms</a>
@@ -676,17 +682,28 @@
     </div>
   </div>
 </div>
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://getbootstrap.com/assets/js/vendor/popper.min.js"></script>
     <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-    <script src="../static/js/chart.js"></script>
-    <script src="../static/js/toolkit.js"></script>
-    <script src="../static/js/application.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/handlebars-intl@1.1.2/dist/handlebars-intl.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="../static/js/chart.js"></script>
+    <script src="../static/js/toolkit.js"></script>
+    <script src="../static/js/application.js"></script>
+    <script src="../static/js/home.js"></script>
+    <script type="text/javascript">
+      function showResults(results){
+          
+        }
+        function getConnectionId(id){
+            console.log('here');
+            console.log($('.'+id).attr('data-mentorship-id'));
+            var mentorship_id = {mentorship_id: $('.'+id).attr('data-mentorship-id')};
+            console.log(mentorship_id)
+            $.get('/accept_request',mentorship_id, showResults)
+        }
+      </script>
     <script>
       // execute/clear BS loaders for docs
       $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})

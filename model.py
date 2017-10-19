@@ -354,12 +354,17 @@ class ScheduledEvents(db.Model):
 
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     event_code = db.Column(db.String(4), db.ForeignKey('events.event_code'))
+    host = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    guest_RSVP = db.Column(db.Boolean, default=True)
+    guest = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    guest_RSVP = db.Column(db.Boolean, default=False)
     mentorship_id = db.Column(db.Integer,
                               db.ForeignKey('mentorships.mentorship_id'))
     title = db.Column(db.String(80), nullable=False)
     date = db.Column(db.DateTime)
     attachments = db.Column(db.LargeBinary, nullable=True)
-
+    host_notes = db.Column(db.String(400), nullable=True)
+    guest_notes = db.Column(db.String(400), nullable=True)
     # Define relationship to mentorship
     mentorship = db.relationship("Mentorship",
                                  backref=db.backref("scheduled_events",
