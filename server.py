@@ -93,6 +93,14 @@ def accept():
         return 'Request accepted'
     return none
 
+@app.route('/all_matches.json')
+def show_matches():
+    """Returns a list of matches."""
+
+    users = get_matches()
+
+    return jsonify(users)
+
 @app.route('/areas_of_interest', methods=['GET', 'POST'])
 def show_areas_of_interest():
     """Store areas of interest in session."""
@@ -176,17 +184,15 @@ def mentor_registration():
     return render_template('mentor_register.html')
 
 
-@app.route('/matches.json/page/<int:page>')
-@app.route('/matches.json')
-def show_matches(page=1):
-    """Send dict of matching users."""
-    count = len(get_matches())
+@app.route('/matches')
+def get_matches_for_page():
+    """return matches per page."""
+    page = request.args.get('page', 1)
+    print "here"
+    matches = requests.args.get('matches')
 
-    users = get_matches_for_page(page, PER_PAGE, count)
-    print count, page, users
-    pagination = Pagination(page, PER_PAGE, count)
-    print pagination
-    return jsonify(users)
+    return jsonify(matches[PER_PAGE*(page-1):(PER_PAGE*page)])
+
 
 @app.route('/notifications')
 def show_notifications():
@@ -232,13 +238,14 @@ def page_not_found(error):
 
 
 @app.route('/profile')
-def profile():
+@app.route('/profile/<current>')
+def profile(current='bm'):
     """Render user profile's main page."""
     user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
     session['user_id'] = user_id
     user = User.query.get(user_id).serialize()
 
-    return render_template("profile.html", user=user)
+    return render_template("profile.html", user=user, current=current)
 
 
 @app.route('/register')
@@ -331,8 +338,6 @@ def get_user_data(access_token):
 # use the data dict from the returned JSON to create a new user
     if response.ok:
         load_user_data(data)
-
-
 # If there was an error (status code between 400 and 600), use an empty list
     else:
         flash("Error: " + data['message'] + 'status', data['status'])
@@ -451,6 +456,7 @@ def add_or_get_company(company):
 
     return company.company_id
 
+
 def add_pets_hobbies():
     """Add user pets and hobbies to db. """
     user_id = session['user_id']
@@ -471,6 +477,7 @@ def add_pets_hobbies():
         db.session.add(new_hobby)
         db.session.commit()
 
+
 def add_user_scores():
     """Add user scores to db."""
     user_id = session['user_id']
@@ -483,17 +490,6 @@ def add_user_scores():
             score=score)
         db.session.add(new_score)
         db.session.commit()
-
-
-def get_matches_for_page(page, PER_PAGE, count):
-    """return matches per page."""
-    matches = get_matches()
-
-    if page == 1:
-        return matches[0:PER_PAGE]
-
-
-    return matches[PER_PAGE*page:(PER_PAGE*page)+ PER_PAGE]
 
 
 def get_matches():

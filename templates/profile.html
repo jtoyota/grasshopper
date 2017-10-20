@@ -353,7 +353,7 @@
   <nav class="profile-header-nav">
     <ul class="nav nav-tabs justify-content-center">
       <li class="nav-item">
-        <a class="nav-link active" href="/matches" id='user-matches'>
+        <a id='user-matches' class="nav-link {% if current == 'bm' %}active{% endif %}" href="#" >
         {%if user['is_mentor'] %}
         Mentees - Best Matches
         {% else %}
@@ -362,7 +362,7 @@
       </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/search">
+        <a class="nav-link {% if current == 'fm' %}active{% endif %}" href="#">
         {%if user['is_mentor'] %}
         Find Mentees
         {% else %}
@@ -370,8 +370,9 @@
         {% endif %}
         </a>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link" href="#">Resources</a>
+        <a class="nav-link {% if current == 'pr' %}active{% endif %}" href="#">Pending Requests</a>
       </li>
     </ul>
   </nav>

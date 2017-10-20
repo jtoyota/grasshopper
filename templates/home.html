@@ -124,7 +124,7 @@
           <div class="media-list media-list-users list-group js-msgGroup">
             <a href="#" class="list-group-item list-group-item-action">
               <div class="media">
-                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="assets/img/avatar-fat.jpg">
+                <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dogs-in-glasses-1.jpg">
                 <div class="media-body">
                   <strong>Wonder Woman</strong> and <strong>1 other</strong>
                   <div class="media-body-secondary">
@@ -436,11 +436,11 @@
         <div class="card-body">
           <h6 class="mb-3">About <small>· <a href="#">Edit</a></small></h6>
           <ul class="list-unstyled list-spaced">
-            <li><span class="text-muted icon icon-calendar mr-3"></span>Went to <a href="#">Oh, Canada</a>
-            <li><span class="text-muted icon icon-users mr-3"></span>Became friends with <a href="#">Obama</a>
-            <li><span class="text-muted icon icon-github mr-3"></span>Worked at <a href="#">Github</a>
+            <li><span class="text-muted icon icon-calendar mr-3"></span>Active since <a href="#">{{user['active_since'].strftime('%B %Y')}}</a>
+            <li><span class="text-muted icon icon-users mr-3"></span>Interested in <a href="#">{{user['industry']}}</a>
+            <li><span class="text-muted icon icon-github mr-3"></span>{{user['positions']['values'][0]['title']}} at <a href="#">{{user['positions']['values'][0]['company']}}</a>
             <li><span class="text-muted icon icon-home mr-3"></span>Lives in <a href="#">San Francisco, CA</a>
-            <li><span class="text-muted icon icon-location-pin mr-3"></span>From <a href="#">Seattle, WA</a>
+            <li><span class="text-muted icon icon-location-pin mr-3"></span>From <a href="#">Brazil</a>
           </ul>
         </div>
       </div>
@@ -498,16 +498,20 @@
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span class="icon icon-users"></span>
-                Members
+                {%if user['is_mentor'] %}
+                Mentees
+                {% else %}
+                Mentors
+                {% endif %}
               </a>
             </li>
           </ul>
         </li>
-        
+
         <li class="media list-group-item p-4">
           <img
             class="media-object d-flex align-self-start mr-3"
-            src="assets/img/avatar-dhg.png">
+            src={{user['picture_url']}}>
           <div class="media-body">
             <div class="media-heading">
               <small class="float-right text-muted">4 min</small>
@@ -520,19 +524,7 @@
 
             <div class="media-body-inline-grid" data-grid="images">
               <div style="display: none">
-                <img data-action="zoom" data-width="1050" data-height="700" src="assets/img/unsplash_1.jpg">
-              </div>
-
-              <div style="display: none">
-                <img data-action="zoom" data-width="640" data-height="640" src="assets/img/instagram_1.jpg">
-              </div>
-
-              <div style="display: none">
-                <img data-action="zoom" data-width="640" data-height="640" src="assets/img/instagram_13.jpg">
-              </div>
-
-              <div style="display: none">
-                <img data-action="zoom" data-width="1048" data-height="700" src="assets/img/unsplash_2.jpg">
+                <img data-action="zoom" data-width="1050" data-height="700" src="../static/images/article1.png">
               </div>
             </div>
 
@@ -540,7 +532,7 @@
               <li class="media mb-3">
                 <img
                   class="media-object d-flex align-self-start mr-3"
-                  src="assets/img/avatar-fat.jpg">
+                  src="../static/images/dog4.jpg">
                 <div class="media-body">
                   <strong>Doggo: </strong>
                   Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.
@@ -549,7 +541,7 @@
               <li class="media">
                 <img
                   class="media-object d-flex align-self-start mr-3"
-                  src="assets/img/avatar-mdo.png">
+                  src="../static/images/dog1.jpg">
                 <div class="media-body">
                   <strong>Balloonicorn: </strong>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
@@ -579,7 +571,7 @@
         <li class="media list-group-item p-4">
           <img
             class="media-object d-flex align-self-start mr-3"
-            src="assets/img/avatar-mdo.png">
+            src="../static/images/dogs-in-glasses-1.png">
           <div class="media-body">
             <div class="media-heading">
               <small class="float-right text-muted">34 min</small>
@@ -591,7 +583,7 @@
             </p>
 
             <div class="media-body-inline-grid" data-grid="images">
-              <img style="display: none" data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_3.jpg">
+              <img style="display: none" data-width="640" data-height="640" data-action="zoom" src="../static/images/dog4.jpg">
             </div>
 
             <ul class="media-list">
@@ -619,7 +611,7 @@
         <div class="card-body">
           <h6 class="mb-3">Suggested Mentees</h6>
           <div data-grid="images" data-target-height="150">
-            <img class="media-object" data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_2.jpg">
+            <img class="media-object" data-width="640" data-height="640" data-action="zoom" src="../static/images/burn_everything.png">
           </div>
           <p><strong>You are an awesome mentor.</strong>This is a placeholder text
           for something</p>
@@ -631,7 +623,7 @@
         <div class="card-body">
         <h6 class="mb-3">
             Connection requests
-            <small>· <a href="#">View All</a></small></h6>
+            <small>· <a href="/profile/pr">View All</a></small></h6>
             <div class="content-placeholder"></div>
         </div>
 
