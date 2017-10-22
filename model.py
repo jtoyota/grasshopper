@@ -104,7 +104,8 @@ class User(db.Model):
     def find_matches(self):
         """Return list of users in decrescent order of pearson correlation."""
         if self.is_mentor:
-            other_users = [ u for u in User.query.filter_by(is_mentor='False') ]
+            other_users = [ u for u in User.query.filter_by(is_mentor='False', 
+                                                            country_code='BR') ]
         else:
             other_users = [ u for u in User.query.filter_by(is_mentor='True') ]
 
@@ -130,7 +131,6 @@ class AreasOfInterest(db.Model):
         return """<Area of interest area_id={} title={}
             desciption={}>""".format(self.area_id, self.title,
                                      self.description)
-
 
 class AreasOfInterestScore(db.Model):
     """Likert scale for areas of interest."""

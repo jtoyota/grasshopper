@@ -365,7 +365,7 @@
                     <span class="glyphicon glyphicon-user"></span> Follow
                   </button>
                   <strong>{{user['first_name']}} {{user['last_name']}}</strong>
-                  <p>@dhg - Palo Alto</p>
+                  <p>mbichoffe - San Francisco</p>
                 </div>
               </div>
             </li>
@@ -419,7 +419,7 @@
 
           <ul class="card-menu">
             <li class="card-menu-item">
-              <a href="#userModal" class="text-inherit" data-toggle="modal">
+              <a href="#userModal" class="text-inherit icon icon-users" data-toggle="modal">
                 {%if user['is_mentor'] %}
                 Mentees
                 {% else %}
@@ -438,7 +438,7 @@
           <ul class="list-unstyled list-spaced">
             <li><span class="text-muted icon icon-calendar mr-3"></span>Active since <a href="#">{{user['active_since'].strftime('%B %Y')}}</a>
             <li><span class="text-muted icon icon-users mr-3"></span>Interested in <a href="#">{{user['industry']}}</a>
-            <li><span class="text-muted icon icon-github mr-3"></span>{{user['positions']['values'][0]['title']}} at <a href="#">{{user['positions']['values'][0]['company']}}</a>
+            <li><span class="text-muted icon icon-briefcase mr-3"></span>{{user['positions']['values'][0]['title']}} at <a href="#">{{user['positions']['values'][0]['company']}}</a>
             <li><span class="text-muted icon icon-home mr-3"></span>Lives in <a href="#">San Francisco, CA</a>
             <li><span class="text-muted icon icon-location-pin mr-3"></span>From <a href="#">Brazil</a>
           </ul>
@@ -448,6 +448,7 @@
        <div class="card d-md-block d-lg-block mb-4">
         <div class="card-body">
           <h6 class="mb-3">Upcoming Events <small>· <a href="#">Edit</a></small></h6>
+          <a href="#">add event</a>
           <div data-grid="images" data-target-height="150">
             <div>
               <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_5.jpg">
@@ -462,21 +463,12 @@
             </div>
 
             <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_8.jpg">
-            </div>
 
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_9.jpg">
-            </div>
-
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_10.jpg">
-            </div>
+          </div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="col-lg-6">
 
       <ul class="list-group media-list media-list-stream mb-4">
@@ -656,19 +648,12 @@
       <div class="card card-link-list">
         <div class="card-body">
           Marina Bichoffe Project
-          <a href="#">About</a>
-          <a href="#">Help</a>
-          <a href="#">Terms</a>
+          <a href="#">About Marina</a>
           <a href="#">Privacy</a>
           <a href="#">Cookies</a>
-          <a href="#">Ads </a>
           <a href="#">Info</a>
-          <a href="#">Brand</a>
+          <a href="#">Be a real mentor</a>
           <a href="#">Blog</a>
-          <a href="#">Status</a>
-          <a href="#">Apps</a>
-          <a href="#">Jobs</a>
-          <a href="#">Advertise</a>
         </div>
       </div>
     </div>

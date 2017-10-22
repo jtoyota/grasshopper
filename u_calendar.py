@@ -6,7 +6,6 @@ from apiclient import discovery  # create  a service endpoint for interacting wi
 from oauth2client import client  # additional resources for authorized data
 from oauth2client import tools
 from oauth2client.file import Storage
-
 import datetime
 
 try:
@@ -51,7 +50,7 @@ def get_credentials():
     return credentials
 
 
-def main():
+def add_event(summary, start, end, atendees):
     """Shows basic usage of the Google Calendar API.
 
     Creates a Google Calendar API service object and inserts event into 
@@ -60,22 +59,24 @@ def main():
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     GCAL = discovery.build('calendar', 'v3', http)
+    atendees = [{'email': atendee} for atendee in atendees]
 
     GMT_OFF = '-07:00'      # PDT/MST/GMT-7
     EVENT = {
-        'summary': 'Baloonicorns Birthday',
-        'start': {'dateTime': '2017-09-05T11:00:00%s' % GMT_OFF},
-        'end': {'dateTime': '2017-09-05T12:00:00%s' % GMT_OFF},
-        'attendees': [
-            {'email': 'eileen.hays@gmail.com'},
-            # {'email': ''},
-        ],
+        'summary': summary,
+        'start': {'dateTime': start+GMT_OFF},#format 2017-10-21T11:00:00
+        'end': {'dateTime': '2017-10-21T12:00:00%s' % GMT_OFF},
+        'attendees': atendees,
     }
 
     e = GCAL.events().insert(calendarId='primary',
                              sendNotifications=True, body=EVENT).execute()
 
     print('''*** %r event added:
+        Start: %s
+        End:   %s''' % (e['summary'].encode('utf-8'),
+            e['start']['dateTime'], e['end']['dateTime']))
+    return('''*** %r event added:
         Start: %s
         End:   %s''' % (e['summary'].encode('utf-8'),
             e['start']['dateTime'], e['end']['dateTime']))
@@ -95,4 +96,4 @@ def main():
     #     print(start, event['summary'])
 
 if __name__ == '__main__':
-    main()
+    add_event('this', '2017-10-21T12:00:00', '2017-10-21T21:00:00', ['bichoffe.marina@gmail.com'])

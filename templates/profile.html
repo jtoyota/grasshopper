@@ -353,7 +353,7 @@
   <nav class="profile-header-nav">
     <ul class="nav nav-tabs justify-content-center">
       <li class="nav-item">
-        <a id='user-matches' class="nav-link {% if current == 'bm' %}active{% endif %}" href="#" >
+        <a id='user-matches' class="nav-link users {% if current == 'bm' %}active{% endif %}" href="#" >
         {%if user['is_mentor'] %}
         Mentees - Best Matches
         {% else %}
@@ -362,7 +362,7 @@
       </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {% if current == 'fm' %}active{% endif %}" href="#">
+        <a id='find-users' class="nav-link users {% if current == 'fm' %}active{% endif %}" href="#">
         {%if user['is_mentor'] %}
         Find Mentees
         {% else %}
@@ -372,7 +372,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {% if current == 'pr' %}active{% endif %}" href="#">Pending Requests</a>
+        <a id='pending-requests' class="nav-link users {% if current == 'pr' %}active{% endif %}" href="#">Pending Requests</a>
       </li>
     </ul>
   </nav>
@@ -429,13 +429,13 @@
               <div class="col-6">
               <ul class="card-menu" style="display: block;">
               <h6 class="py-0 text-left">Your expertise:</h6>
-              {{#areas_score}}
+              {{#user_score}}
                 <p class="lead text-left">{{title}}</p>
                   <div class="progress my-3" style="width: 10em">
                     <div class="progress-bar" role="progressbar" aria-valuenow={{score}} aria-valuemin="1" aria-valuemax="5" {{#percent score}}{{/percent}}><span class="sr-only"></span>
                     </div>
                   </div>
-              {{/areas_score}}
+              {{/user_score}}
               </ul>
             </div>  
           </div>

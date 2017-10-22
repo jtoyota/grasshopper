@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, flash, redirect, session, \
     jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import *
+# import calendar
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
@@ -44,6 +45,19 @@ def about():
     """Info about the program."""
     return render_template("/about.html")
 
+
+@app.route('/add_to_calendar')
+def add_to_calendar():
+    """add event to google calendar API"""
+    event_id = None
+    start = None
+    end = None
+    summary = None
+    email = None
+    # calendar.add_event()
+    pass
+
+
 @app.route('/connection_requests/<status>.json')
 def show_pending_requests(status='pending_requests'):
     """return json file of all pending requests."""
@@ -53,8 +67,8 @@ def show_pending_requests(status='pending_requests'):
     if status == 'pending_requests':
         if session['mentor']:
             requests_query = Mentorship.query.options(
-            db.joinedload('mentee')).filter_by(mentor_id=requester,
-                                                       accepted_request='False').all()
+                db.joinedload('mentee')).filter_by(mentor_id=requester,
+                                                   accepted_request='False').all()
         elif session['mentee']:
             requests_query = Mentorship.query.options(
                 db.joinedload('mentee')).filter_by(mentee_id=requester,
@@ -79,6 +93,7 @@ def show_pending_requests(status='pending_requests'):
         requests.append(req_info)
 
     return jsonify(requests)
+
 
 @app.route('/accept_request/')
 def accept():
@@ -184,15 +199,6 @@ def mentor_registration():
     return render_template('mentor_register.html')
 
 
-@app.route('/matches')
-def get_matches_for_page():
-    """return matches per page."""
-    page = request.args.get('page', 1)
-    print "here"
-    matches = requests.args.get('matches')
-
-    return jsonify(matches[PER_PAGE*(page-1):(PER_PAGE*page)])
-
 
 @app.route('/notifications')
 def show_notifications():
@@ -261,10 +267,6 @@ def show_linkedin_registration():
 def search_for_users():
     pass
 
-@app.route('/total_rows.json')
-def get_total_rows_matches():
-    """Return total number of matches for a given user."""
-    return len(get_matches())
 
 ######### Helper Functions #########
 
@@ -501,8 +503,6 @@ def get_matches():
         user_comp.append(match[1].serialize())
 
     return user_comp
-
-
 
 
 # Normally, if you use an undefined variable in Jinja2, it fails silently.
