@@ -9,9 +9,22 @@ $(document).ready(function(){
       return false;
    });
 
+    //convert user score to percentage to be displayed in progress bar
+    Handlebars.registerHelper('percent', function(score){
+      score = (score*100)/5
+      return new Handlebars.SafeString(
+      'style="width:'
+      + score
+      + '%"');
+    });
+
     //mentees - best matches
     var matches;
+    //results per page
     var perPage = 10;
+    //pending requests;
+    var pending_requests;
+
     //get json from server;
     $.ajax({
         method: 'GET',
@@ -19,20 +32,30 @@ $(document).ready(function(){
         async: false,
         success: function(data){
             matches = data
-            console.log(matches)
         }
     });
-
-    //slice array
+    $.ajax({
+        method: 'GET',
+        url: '/connection_requests/pending_requests.json',
+        async: false,
+        success:function(data){
+        pending_requests =data
+    }
+    })
+    console.log('pending', pending_requests)
+    //slice json to display results in page
     function sliceArray(page){
         return matches.slice(perPage*(page-1),(perPage*page))
     }
+
 
     if($('#user-matches').hasClass('active')) {
         //if session with user matches is selected on profile page
         // var matches = getAllMatches()//create global variable to be accessed by function later 
         var count = 1; // page index for pagination
-           
+        console.log(count)
+        var data = sliceArray(count);
+        sortData(data);   
         //
         var win = $(window);
         // Each time the user scrolls
@@ -44,18 +67,9 @@ $(document).ready(function(){
                 sortData(data);
             }
         });
-   
-        //convert user score to percentage to be displayed in progress bar
-        Handlebars.registerHelper('percent', function(score){
-          score = (score*100)/5
-          return new Handlebars.SafeString(
-          'style="width:'
-          + score
-          + '%"');
-        });
-
 
         function sortData(data){
+            console.log("here!")
             var source = $("#match-template").html();
             var template = Handlebars.compile(source);
             var user_data = []; 
@@ -79,10 +93,45 @@ $(document).ready(function(){
                         'pets': data[i]['pets'],
 
                 });
-            }    
+            } 
             var compiledHtml = template(user_data)
             // Add the compiled html to the page
             $('.content-placeholder').append(compiledHtml);    
         }    
-    }            
+    }
+
+    if($('#find-users').hasClass('active')) {
+        alert('here!')
+    }
+
+    if($('#pending-requests').hasClass('active')) {
+
+        // $('.content-placeholder').hide();
+        console.log('gere')
+        var source = $("#requests").html();
+        var template = Handlebars.compile(source);
+        var requests_data = []; //json file from server serialize function
+        data = pending_requests.slice(0,3)
+        for (var i = 0; i < data.length; i++) {
+            request_data.push ({
+                    'user_id': data[i]['mentee_info']['user_id'],
+                    'first_name': data[i]['mentee_info']['first_name'],
+                    'last_name': data[i]['mentee_info']['last_name'],
+                    'title' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['title'] : null),
+                    'company' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['company'] : null),
+                    'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                    'mentorship_id': data[i]['mentorship_id']           
+            });
+        }
+        var compiledHtml = template(requests_data)
+        console.log(compiledHtml)
+        // Add the compiled html to the page
+        $('.pending-placeholder').append(compiledHtml);  
+  
+    }
+
+         if($('#find-users').hasClass('active')) {
+        alert('here!')
+    }
+
 });

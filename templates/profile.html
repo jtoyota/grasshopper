@@ -34,6 +34,31 @@
   </head>
 
 <body class="with-top-navbar">
+
+<!-- individual messages go here -->
+<div class="modal fade msg" id="mymsgModal" tabindex="-1" role="dialog" aria-labelledby="msgModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Send a message to Margo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+<!--       <div class="modal-body"> -->
+        <input type="text" class="modal-body" placeholder="What would you like to ask or tell? Be kind and concise - you have 300 characters." style='height: 360em'>
+
+<!--       </div> -->
+      <div class="modal-actions">
+        <button type="button" class="btn-link modal-action" data-dismiss="modal">
+          <strong>Send</strong>
+        </button>
+        <button type="button" class="btn-link modal-action" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+<!-- end -->
   
 <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="msgModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -50,7 +75,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dog2.jpg">
                 <div class="media-body">
-                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <strong>Maria Jacobs</strong>
                   <div class="media-body-secondary">
                     Aenean eu leo quam. Pellentesque ornare sem lacinia quam &hellip;
                   </div>
@@ -72,7 +97,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src={{user['picture_url']}}>
                 <div class="media-body">
-                  <strong>Dave Gamache</strong>
+                  <strong>{{user['first_name']}} {{user['last_name']}}</strong>
                   <div class="media-body-secondary">
                     Brunch sustainable placeat vegan bicycle rights yeah…
                   </div>
@@ -83,7 +108,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dog2.jpg">
                 <div class="media-body">
-                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <strong>Wonder Woman</strong> 
                   <div class="media-body-secondary">
                     Aenean eu leo quam. Pellentesque ornare sem lacinia quam &hellip;
                   </div>
@@ -262,7 +287,7 @@
 
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary app-navbar">
 
-  <a class="navbar-brand" href="../index.html">Grasshopper
+  <a class="navbar-brand" href="/home">Grasshopper
   </a>
 
   <button
@@ -282,13 +307,13 @@
         <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="../profile/index.html">Profile</a>
+        <a class="nav-link" href="../profile/bm">Profile</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="modal" href="#msgModal">Messages</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../docs/index.html">Connection Requests</a>
+        <a class="nav-link" href="../docs/index.html">Resources</a>
       </li>
 
       <li class="nav-item d-md-none">
@@ -389,13 +414,13 @@
       <div class="card card-profile mb-4" id='matches-profile'>
         <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
         <div class="card-body text-center">
-          <a href="profile/index.html">
+          <a href="profile/bm">
             <img
               class="card-profile-img"
               src={{picture_url}}>
           </a>
           <h5 class="card-title">
-            <a class="text-inherit" href="profile/index.html">{{ first_name }} {{ last_name }}</a>
+            <a class="text-inherit" href="profile/bm">{{ first_name }} {{ last_name }}</a>
           </h5>
           <ul class="list-unstyled list-spaced">
             <li><span class="text-muted icon icon-calendar mr-3">
@@ -469,7 +494,7 @@
                   </button>
                 </div>
                   <div class="btn">  
-                      <button id="message" class="btn btn-outline-primary btn-lg">
+                      <button id="message" data-toggle="modal" href="#mymsgModal" class="btn btn-outline-primary btn-lg">
                         <span class="icon icon-chat"></span>
                         Message
                       </button>
@@ -486,7 +511,77 @@
       {{/each}}
       {% endraw %}
       </script>
-    </div>
+      {% raw %}
+<!--   <script id="requests" type="text/x-handlebars-template">
+         {{#each this}}
+      <div class="card card-profile mb-4" id='matches-profile'>
+        <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
+        <div class="card-body text-center">
+          <a href="profile/index.html">
+            <img
+              class="card-profile-img"
+              src={{picture_url}}>
+          </a>
+          <h5 class="card-title">
+            <a class="text-inherit" href="profile/index.html">{{ first_name }} {{ last_name }}</a>
+          </h5>
+          <ul class="list-unstyled list-spaced">
+            <li><span class="text-muted icon icon-calendar mr-3">
+            Active since {{ active_since }}
+            </span>
+            </li>
+            <li><span class="text-muted icon icon-briefcase mr-3">
+            </span>{{title}} at <a href="#">{{company}}</a>
+            </li>
+            <li><span class="text-muted icon icon-home mr-3"></span>From <a href="#">{{country}}</a>
+            </li>            
+          </ul>          
+          <div class="card-body text-left">
+            <span><h6 class="mb-3 icon icon-quote mr-3"> In {{ first_name }}'s words</h6></span>
+            <p class="mb-4">{{ summary }}</p>
+          </div>
+          <div class="row">
+            <div class="col-6">
+            <ul class="card-menu" style="display: block;">
+              <h6 class="py-0 text-left"> Looking for advice in:</h6>
+                <p class="mb-0 text-left"></p>
+              </ul>
+            </div> -->
+            <!-- add user's score here -->
+ <!--              <div class="col-6">
+            </div>  
+          </div>
+        </div>
+      </div>
+      <div class="card d-md-block d-lg-block mb-4">
+        <div class="card-body">
+          <h6 class="mb-3">More about <a href="#">{{ first_name }}</a></h6>
+          <div class="nav btn-block">
+                <div class="btn">
+                  <div class="media-body-actions">
+                    <button class="btn btn-outline-primary btn-sm {{@index}}" data-mentorship-id="{{mentorship_id}}" onclick="getConnectionId({{@index}})">
+                    <span class="icon icon-add-user"></span>Accept</button>
+                  </div>
+                  <div class="btn">  
+                      <button id="message" class="btn btn-outline-primary btn-lg">
+                        <span class="icon icon-chat"></span>
+                        Message
+                      </button>
+                  </div>
+                  <div class="btn">
+                    <a class="nav-link" href="#">
+                      <span class="icon icon-plus"></span>
+                      More
+                    </a>
+                  </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+      {% endraw %}
+      </script> -->
+
+</div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://getbootstrap.com/assets/js/vendor/popper.min.js"></script>
     <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
