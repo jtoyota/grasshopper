@@ -1,8 +1,10 @@
 
 $(document).ready(function(){
 
-    $.get('all_matches.json',function(data){
-    var source = $("#match-template").html();
+    $.get('/all_matches.json',function(data){
+        console.log(data)
+    var source = $("#matches-template").html();
+    console.log('source', source)
     var template = Handlebars.compile(source);
     var user_data = [];
     data = data.slice(1,4) 
@@ -26,5 +28,6 @@ $(document).ready(function(){
     } 
     var compiledHtml = template(user_data)
     // Add the compiled html to the page
-    $('.content-placeholder').append(compiledHtml); 
-}
+    $('.content-placeholder').append(compiledHtml);
+    }); 
+});

@@ -437,7 +437,7 @@
           <h6 class="mb-3">About <small>· <a href="#">Edit</a></small></h6>
           <ul class="list-unstyled list-spaced">
             <li><span class="text-muted icon icon-calendar mr-3"></span>Active since <a href="#">{{user['active_since'].strftime('%B %Y')}}</a>
-            <li><span class="text-muted icon icon-users mr-3"></span>Interested in <a href="#">{{user['industry']}}</a>
+            <li><span class="text-muted icon icon-light-bulb mr-3"></span>Interested in <a href="#">{{user['industry']}}</a>
             <li><span class="text-muted icon icon-briefcase mr-3"></span>{{user['positions']['values'][0]['title']}} at <a href="#">{{user['positions']['values'][0]['company']}}</a>
             <li><span class="text-muted icon icon-home mr-3"></span>Lives in <a href="#">San Francisco, CA</a>
             <li><span class="text-muted icon icon-location-pin mr-3"></span>From <a href="#">Brazil</a>
@@ -661,8 +661,8 @@
     <div class="col-lg-3">
       <div class="alert alert-warning alert-dismissible d-none d-lg-block" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <a class="alert-link" href="/profile">Visit your profile!</a> .
-      </div>
+        <a class="alert-link" href="/profile">You have</a>2
+      </div> new connection requests!
 
       <div class="card mb-4 d-none d-lg-block">
         <div class="card-body">

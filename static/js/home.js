@@ -8,7 +8,6 @@ $(".feed").on('click', function(evt) {
     return false;
 });
 
-
     $.get('/connection_requests/pending_requests.json',function(data){
         var source = $("#request-template").html();
         var template = Handlebars.compile(source);

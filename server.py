@@ -503,7 +503,7 @@ def get_matches():
     user = User.query.get(session['user_id'])
     matches = user.find_matches()
     user_comp = []
-    for match in matches:
+    for match in matches[:20]:
         user_comp.append(match[1].serialize())
 
     return user_comp
