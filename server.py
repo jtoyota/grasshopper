@@ -203,7 +203,9 @@ def mentor_registration():
 @app.route('/notifications')
 def show_notifications():
     """render notifications page."""
-    return render_template("notifications.html")
+    user_id = session['user_id']
+    user = User.query.get(user_id).serialize()
+    return render_template("notifications.html", user=user)
 
 
 @app.route('/oauth')
@@ -266,6 +268,8 @@ def show_linkedin_registration():
 @app.route('/search')
 def search_for_users():
     pass
+
+
 
 
 ######### Helper Functions #########

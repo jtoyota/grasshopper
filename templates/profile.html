@@ -44,7 +44,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
 <!--       <div class="modal-body"> -->
-        <input type="text" class="modal-body" placeholder="What would you like to ask or tell? Be kind and concise - you have 300 characters." style='height: 360em'>
+        <textarea id='msg-placeholder' class="modal-body" placeholder="What would you like to ask or tell? Be kind and concise :) You have 300 characters." style='height: 150px'></textarea>
 
 <!--       </div> -->
       <div class="modal-actions">
@@ -130,7 +130,7 @@
               <div class="media">
                 <img class="rounded-circle media-object d-flex align-self-start mr-3" src="../static/images/dog1.jpg">
                 <div class="media-body">
-                  <strong>Dave Gamache</strong>
+                  <strong>{{user['first_name']}} {{user['last_name']}}</strong>
                   <div class="media-body-secondary">
                     Brunch sustainable placeat vegan bicycle rights yeah…
                   </div>
@@ -404,6 +404,7 @@
 </div>
 <div class="container pt-4 pb-5">
   <div class="content-placeholder"></div>
+  <div class="pending-placeholder"></div>
   <p id="loading" style="display: none; text-align: center;">
     <img src="../static/images/Ripple.gif" alt="Loading…" />
   </p>
@@ -414,7 +415,7 @@
       <div class="card card-profile mb-4" id='matches-profile'>
         <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
         <div class="card-body text-center">
-          <a href="profile/bm">
+          <a href="profile/pr">
             <img
               class="card-profile-img"
               src={{picture_url}}>
@@ -488,10 +489,10 @@
           </ul>
           <div class="nav btn-block">
                 <div class="btn">
-                <button class="btn btn-outline-primary btn-lg {{@index}}" data-userid="{{user_id}}" onclick="getConnectionId({{@index}})">
+                <button class="btn btn-outline-primary btn-lg {{@index}}" data-userid="{{user_id}}" onclick="getRequestId({{@index}})">
                     <span class="icon icon-add-user"></span>
                     Connect
-                  </button>
+                </button>
                 </div>
                   <div class="btn">  
                       <button id="message" data-toggle="modal" href="#mymsgModal" class="btn btn-outline-primary btn-lg">
@@ -512,9 +513,9 @@
       {% endraw %}
       </script>
       {% raw %}
-<!--   <script id="requests" type="text/x-handlebars-template">
+  <script id="requests" type="text/x-handlebars-template">
          {{#each this}}
-      <div class="card card-profile mb-4" id='matches-profile'>
+    <div class="card card-profile mb-4" id='matches-profile'>
         <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
         <div class="card-body text-center">
           <a href="profile/index.html">
@@ -540,28 +541,14 @@
             <span><h6 class="mb-3 icon icon-quote mr-3"> In {{ first_name }}'s words</h6></span>
             <p class="mb-4">{{ summary }}</p>
           </div>
-          <div class="row">
-            <div class="col-6">
-            <ul class="card-menu" style="display: block;">
-              <h6 class="py-0 text-left"> Looking for advice in:</h6>
-                <p class="mb-0 text-left"></p>
-              </ul>
-            </div> -->
-            <!-- add user's score here -->
- <!--              <div class="col-6">
-            </div>  
-          </div>
         </div>
-      </div>
       <div class="card d-md-block d-lg-block mb-4">
         <div class="card-body">
           <h6 class="mb-3">More about <a href="#">{{ first_name }}</a></h6>
           <div class="nav btn-block">
                 <div class="btn">
-                  <div class="media-body-actions">
-                    <button class="btn btn-outline-primary btn-sm {{@index}}" data-mentorship-id="{{mentorship_id}}" onclick="getConnectionId({{@index}})">
+                    <button class="btn btn-outline-primary btn-lg {{@index}}" data-mentorship-id="{{mentorship_id}}" onclick="getConnectionId({{@index}})">
                     <span class="icon icon-add-user"></span>Accept</button>
-                  </div>
                   <div class="btn">  
                       <button id="message" class="btn btn-outline-primary btn-lg">
                         <span class="icon icon-chat"></span>
@@ -574,12 +561,14 @@
                       More
                     </a>
                   </div>
+                </div>
           </div>
-        </div>
       </div>
+    </div>
+  </div>  
       {{/each}}
       {% endraw %}
-      </script> -->
+      </script>
 
 </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -591,7 +580,7 @@
     <script src="../static/js/chart.js"></script>
     <script src="../static/js/toolkit.js"></script>
     <script src="../static/js/application.js"></script>
-<!--     <script type="text/javascript">
+    <script type="text/javascript">
         function showResults(results){
           console.log(results);
         }
@@ -602,7 +591,14 @@
             console.log(user_id)
             $.post('/request_connection',user_id, showResults)
         }
-      </script> -->
+        function getRequestId(id){
+            console.log('here2');
+            console.log($('.'+id).attr('data-mentorship-id'));
+            var mentorship_id = {mentorship_id: $('.'+id).attr('data-mentorship-id')};
+            console.log(mentorship_id)
+            $.get('/accept_request',mentorship_id, showResults)
+        }
+      </script>
     <script src="../static/js/profile.js"></script>
     <script>
       // execute/clear BS loaders for docs

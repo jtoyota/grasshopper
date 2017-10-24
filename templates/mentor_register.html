@@ -19,6 +19,28 @@
         min-width: 100%;
         *width: 100%;
       }
+
+      .btn-circle {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 12px;
+      line-height: 1.428571429;
+      border-radius: 15px;
+      }
+      .btn-circle.btn-lg {
+      width: 50px;
+      height: 50px;
+      padding: 10px 16px;
+      font-size: 18px;
+      line-height: 1.33;
+      border-radius: 25px;
+      }
+      li {
+        list-style-type: none
+      }
+
     </style>
     <!-- Bootstrap core CSS -->
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,19 +69,41 @@
           <!-- This should be replaced when user clicks continue -->
           <div id="registration-process"></div>
           <div class="inner cover">
-            <h1 class="cover-heading" style="text-align: center;">Mentoring is easy.</h1>
-            <p class="lead">
-              <ol>
-                <li>Tell us what you'd like to share </li>
-                  <p>We will match you based on your preferences and experience.</p>
-                <li>Sign up with LinkedIn</li>
-                  <p>We will have access to basic information about your profile, like industry and job title</p>
-                <li>Review potential matches</li>
-                  <p>See our suggestions of motivated women looking for a mentor like you, and pick who you'd like to advise.</p>
-                <li>Get in touch</li>
-                  <p>Mentoring doesn't need to be a huge time commitment. The first step is to send your mentors an encouraging message. We will help you on every step of the way!</p>
-              </ol>
 
+            <h1 class="cover-heading" style="text-align: center;">Mentoring is easy.</h1>
+              <div class=container>
+              <ul class="list-unstyled my-5">
+                <li class="media">
+                 <button type="button" class="btn btn-primary btn-circle btn-lg"><bold>1</bold></button>
+                <div class="media-body">   
+                    <h3 class="mt-0 mb-1">Tell us what you'd like to share</h3>
+                    <p>We will match you based on your preferences and experience.</p>
+                </div>
+                </li>
+                <li class="media my-4">
+                <button type="button" class="btn btn-primary btn-circle btn-lg"><bold>2</bold></button>
+                <div class="media-body">   
+                  <h3>Sign up with LinkedIn</h3>
+                  <p>We will have access to basic information about your profile, like industry and job title</p>
+                </div>
+                </li>
+                <li class="media my-4">
+                <button type="button" class="btn btn-primary btn-circle btn-lg"><bold>3</bold></button>
+                <div class="media-body">  
+                  <h3>Review potential matches</h3>
+                  <p>See our suggestions of motivated women looking for a mentor like you, and pick who you'd like to advise.</p>
+                </div>
+                </li>
+                <li class="media my-4">
+                <button type="button" class="btn btn-primary btn-circle btn-lg"><bold>4</bold></button>
+                <div class="media-body">   
+                <h3>Get in touch</h3>
+                  <p>Mentoring doesn't need to be a huge time commitment. The first step is to send your mentors an encouraging message. We will help you on every step of the way!</p>
+                  </div>
+                  </li>
+              </ul>
+            </div>
+            </div>  
             <a id="mentor-registration-1" class="btn btn-primary btn-lg" href='/areas_of_interest' role="button">Get started&raquo;</a>
           </div>
           <div class="mastfoot">

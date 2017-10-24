@@ -18,9 +18,9 @@
     </title>
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
-    <link href="../assets/css/toolkit.css" rel="stylesheet">
+    <link href="../static/css/toolkit.css" rel="stylesheet">
     
-    <link href="../assets/css/application.css" rel="stylesheet">
+    <link href="../static/css/application.css" rel="stylesheet">
 
     <style>
       /* note: this is a hack for ios iframe for bootstrap themes shopify page */
@@ -34,6 +34,10 @@
 
   </head>
 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+
+  </head>
+
 
 <body class="with-top-navbar">
   
@@ -43,8 +47,7 @@
 
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary app-navbar">
 
-  <a class="navbar-brand" href="../index.html">
-    <img src="../assets/img/brand-white.png" alt="brand">
+  <a class="navbar-brand" href="../index.html">Grasshopper
   </a>
 
   <button
@@ -60,24 +63,24 @@
 
   <div class="collapse navbar-collapse" id="navbarResponsive">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="../index.html">Home <span class="sr-only">(current)</span></a>
+      <li class="nav-item active">
+        <a class="nav-link" href="/home">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../profile/index.html">Profile</a>
+        <a class="nav-link" href="/profile">Profile</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="modal" href="#msgModal">Messages</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../docs/index.html">Docs</a>
+        <a class="nav-link" href="../docs/index.html">Resources</a>
       </li>
 
       <li class="nav-item d-md-none">
-        <a class="nav-link" href="../notifications/index.html">Notifications</a>
+        <a class="nav-link" href="/notifications">Notifications</a>
       </li>
       <li class="nav-item d-md-none">
-        <a class="nav-link" data-action="growl">Growl</a>
+        <a class="nav-link" data-action="growl">Do something awesome</a>
       </li>
       <li class="nav-item d-md-none">
         <a class="nav-link" href="../login/index.html">Logout</a>
@@ -92,12 +95,15 @@
     <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-0 d-none d-md-flex">
       <li class="nav-item">
         <a class="app-notifications nav-link" href="../notifications/index.html">
-          <span class="icon icon-bell"></span>
+          <span class="icon icon-bell"><span class="sr-only">(current)</span></a>
         </a>
       </li>
       <li class="nav-item ml-2">
         <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover">
-          <img class="rounded-circle" src="../assets/img/avatar-dhg.png">
+          <img class="rounded-circle" src=
+          {%if user['picture_url'] %}
+          {{ user['picture_url'] }}>
+          {% endif %}
         </button>
       </li>
     </ul>
@@ -348,36 +354,97 @@
         </a>
       </div>
 
-       <div class="card d-none d-lg-block mb-4">
+       <div class="card d-md-block d-lg-block mb-4">
         <div class="card-body">
-          <h6 class="mb-3">Photos <small>· <a href="#">Edit</a></small></h6>
-          <div data-grid="images" data-target-height="150">
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_5.jpg">
-            </div>
+          <h6 class="mb-3">Upcoming Events <small>· <a href="#">View All</a></small></h6><br>
 
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_6.jpg">
+          <h6 class="mt-0">Friday, October 24</h6>
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+            <div class="row">
+              <div class="col-6 col-md-4">6:30PM</div>
+              <div class="col-12 col-md-8">
+                <div class="media w-100">
+                  <ul class="media-list">
+                  <li>
+                    <h5 class="media title"><small>Intro Meeting</small></h5>
+                  </li>
+                  <li>
+                    <p class='my-0'><small>with <a href='#'>Sandra Fernandes</a></small></p>
+                  </li>
+                  <ul class="avatar-list">
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src={{user['picture_url']}}>
+                    </li>
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src="../static/images/dog13.jpeg">
+                    </li>
+                  </ul>
+                </ul>
             </div>
+            </div>
+            </div>
+            </li>
+          </ul>
 
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_7.jpg">
-            </div>
+          <h6 class="mt-3">Tuesday, October 31</h6>
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+            <div class="row">
+            <div class="col-6 col-md-4">7:30AM</div>
+            <div class="col-12 col-md-8">
+            <div class="media w-100">
+              <ul class="media-list">
+                <li>
+                <h5 class="media title"><small>One-on-One</small></h5>
+                </li>
+                <li>
+                  <p class='my-0'><small>with <a href='#'>Mary Onara</a></small></p>
+                </li>
+                  <ul class="avatar-list">
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src={{user['picture_url']}}>
+                    </li>
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src="../static/images/dog9.jpeg">
+                    </li>
+                  </ul>
+                </ul>
+              </div>
+              </div>
+              </div>
+              </li>
+            </ul>
 
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_8.jpg">
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+            <div class="row">
+              <div class="col-6 col-md-4">3:30PM</div>
+              <div class="col-12 col-md-8">
+              <div class="media w-100">
+              <ul class="media-list">
+                <li>
+                  <h5 class="media title"><small>One-on-One</small></h5>
+                </li>
+                <li>
+                  <p class='my-0'><small>with <a href='#'>Paola Sondre</a></small></p>
+                </li>
+                <ul class="avatar-list">
+                  <li class="avatar-list-item">
+                    <img class="rounded-circle" src={{user['picture_url']}}>
+                  </li>
+                  <li class="avatar-list-item">
+                    <img class="rounded-circle" src="../static/images/dog12.jpeg">
+                  </li>
+                </ul>
+              </ul>
+              </div>
+              </div>
             </div>
-
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_9.jpg">
-            </div>
-
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_10.jpg">
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
-      </div>
+      </div> 
 
       <div class="card d-none d-lg-block">
         <div class="card-body">
@@ -398,14 +465,38 @@
           </ul>
         </div>
       </div>
-    </div>
-
+    </div>  
     <div class="col-lg-6">
       <ul class="list-group media-list media-list-stream mb-2">
         <li class="list-group-item p-4">
           <h4 class="m-0">Notifications</h4>
         </li>
+        <li class="list-group-item media p-4">
+          <span class="icon icon-user text-muted mr-2 align-self-start"></span>
 
+          <div class="media-body">
+            <small class="float-right text-muted">2 min</small>
+            <div class="media-heading">
+              You sent a connection request <a href="#"><strong>Jacob Thornton</strong
+            </div>
+            <div class="mt-2">
+              <div class="row">
+                  <div class="card card-profile mb-2">
+                    <div class="card-header" style="background-image: url(../assets/img/instagram_4.jpg);"></div>
+                    <div class="card-body text-center">
+                      <img class="card-profile-img" src="../assets/img/avatar-fat.jpg">
+                      <h5 class="card-title">Jacob Thornton</h5>
+                      <p class="mb-4" </p>
+                      <button class="btn btn-outline-primary btn-sm">
+                        <span class="icon icon-add-user"></span> Follow
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
         <li class="list-group-item media p-4">
           <span class="icon icon-globe text-muted mr-2"></span>
 
@@ -432,32 +523,16 @@
           <span class="icon icon-user text-muted mr-2 align-self-start"></span>
 
           <div class="media-body">
-            <small class="float-right text-muted">34 min</small>
+            <small class="float-right text-muted">10 hr</small>
             <div class="media-heading mb-2">
-              <a href="#"><strong>Fat</strong></a> and <a href="#"><strong>1 other</strong></a> followed you
+              <a href="#"><strong>Fat</strong></a> and <a href="#"><strong>1 other</strong></a>requested to connect
             </div>
             <ul class="avatar-list">
-              <li class="avatar-list-item"><img class="rounded-circle" src="../assets/img/avatar-fat.jpg">
-              <li class="avatar-list-item"><img class="rounded-circle" src="../assets/img/avatar-dhg.png">
+              <li class="avatar-list-item"><img class="rounded-circle" src="../static/images/dog14.jpeg">
+              <li class="avatar-list-item"><img class="rounded-circle" src="../static/images/dog10.jpeg">
             </ul>
           </div>
         </li>
-
-        <li class="list-group-item media p-4">
-          <span class="icon icon-camera text-muted mr-2 align-self-start"></span>
-
-          <div class="media-body">
-            <small class="float-right text-muted">3 min</small>
-            <div class="media-heading">
-              <a href="#"><strong>Dave Gamache</strong></a> uploaded a photo
-            </div>
-
-            <div class="media-body-inline-grid" data-grid="images">
-              <img style="display: none" data-width="640" data-height="640" data-action="zoom" src="../assets/img/instagram_3.jpg">
-            </div>
-          </div>
-        </li>
-
         <li class="list-group-item media p-4">
           <span class="icon icon-flag text-muted mr-2 align-self-start"></span>
 
@@ -515,7 +590,6 @@
 
             <div class="mt-2">
               <div class="row">
-                <div class="col-lg-6">
                   <div class="card card-profile mb-2">
                     <div class="card-header" style="background-image: url(../assets/img/instagram_4.jpg);"></div>
                     <div class="card-body text-center">
@@ -527,7 +601,6 @@
                       </button>
                     </div>
                   </div>
-                </div>
                 <div class="col-lg-6">
                   <div class="card card-profile mb-2">
                     <div class="card-header" style="background-image: url(../assets/img/instagram_1.jpg);"></div>
@@ -552,11 +625,11 @@
           <div class="media-body">
             <small class="float-right text-muted">30 min</small>
             <div class="media-heading mb-2">
-              <a href="#"><strong>Jacob Thornton</strong></a> and <a href="#"><strong>1 other</strong></a> updated their settings
+              <a href="#"><strong>Anne Womack</strong></a> and <a href="#"><strong>1 other</strong></a> updated their profile
             </div>
             <ul class="avatar-list">
-              <li class="avatar-list-item"><img class="rounded-circle" src="../assets/img/avatar-fat.jpg">
-              <li class="avatar-list-item"><img class="rounded-circle" src="../assets/img/avatar-dhg.png">
+              <li class="avatar-list-item"><img class="rounded-circle" src="../static/images/dog3.jpg">
+              <li class="avatar-list-item"><img class="rounded-circle" src="../static/images/dog9.jpeg">
             </ul>
           </div>
         </li>
@@ -565,9 +638,9 @@
           <span class="icon icon-creative-commons-noncommercial-us text-muted mr-2 align-self-start"></span>
 
           <div class="media-body">
-            <small class="float-right text-muted">1 min</small>
+            <small class="float-right text-muted">12 hr</small>
             <div class="media-heading">
-              <a href="#"><strong>Jacob Thornton</strong></a> quit his job
+              <a href="#"><strong>Paola Sondre</strong></a> RSVP'd to <a href='#'>One-on-One</a>
             </div>
           </div>
         </li>
@@ -577,69 +650,78 @@
 
       <div class="card mb-4 d-none d-lg-block">
         <div class="card-body">
-        <h6 class="mb-3">Active Users <small>· <a href="#">View All</a></small></h6>
-        <ul class="media-list media-list-stream">
-          <li class="media mb-3">
-            <img
-              class="media-object img-circle mr-3 align-self-start"
-              src="../assets/img/avatar-fat.jpg">
-            <div class="media-body">
-              <strong>Jacob Thornton</strong> @fat
-              <div class="media-body-actions">
-                <button class="btn btn-outline-primary btn-sm">
-                  <span class="icon icon-add-user"></span> Follow</button>
-              </div>
-            </div>
-          </li>
-           <li class="media">
-            <img
-              class="media-object img-circle mr-3 align-self-star"
-              src="../assets/img/avatar-mdo.png">
-            <div class="media-body">
-              <strong>Mark Otto</strong> @mdo
-              <div class="media-body-actions">
-                <button class="btn btn-outline-primary btn-sm">
-                  <span class="icon icon-add-user"></span> Follow</button></button>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <h6 class="mb-3">
+            Connection requests
+            <small>· <a href="/profile/pr">View All</a></small></h6>
+            <div class="content-placeholder"></div>
         </div>
+        {% raw %}
+      <!--Data will be inserted in its according place, replacing the brackets.-->
+        <script id="matches-template" type="text/x-handlebars-template">
+              {{#each this}}
+              <ul id=connection_requests class="media-list media-list-stream">
+                <li class="media mb-2">
+                  <img
+                    class="media-object d-flex align-self-start mr-3"
+                    src={{picture_url}}>
+                  <div class="media-body">
+                    <strong><small>{{ first_name }} {{ last_name }}</small></strong>
+                    <span class="text-muted">
+                    </span><small>{{title}} at <a href="#">{{company}}</small></a>
+                    <div class="media-body-actions">
+                      <button class="btn btn-outline-primary btn-sm {{@index}}" data-mentorship-id="{{mentorship_id}}" onclick="getConnectionId({{@index}})">
+                        <span class="icon icon-add-user"></span></small> Connect</small></button>
+                    </div>
+                  </div>
+              </ul>
+      {{/each}}
+      </script> 
+      {% endraw %}
         <div class="card-footer">
-          Dave really likes these nerds, no one knows why though.
+          Make the most of your mentorship with our <a href="#">resources</a>
         </div>
       </div>
 
 
-        <div class="card card-link-list">
-          <div class="card-body">
-          © 2018 Bootstrap
-          <a href="#">About</a>
-          <a href="#">Help</a>
-          <a href="#">Terms</a>
+      <div class="card card-link-list">
+        <div class="card-body">
+          Marina Bichoffe Project
+          <a href="#">About Marina</a>
           <a href="#">Privacy</a>
           <a href="#">Cookies</a>
-          <a href="#">Ads </a>
           <a href="#">Info</a>
-          <a href="#">Brand</a>
+          <a href="#">Be a real mentor</a>
           <a href="#">Blog</a>
-          <a href="#">Status</a>
-          <a href="#">Apps</a>
-          <a href="#">Jobs</a>
-          <a href="#">Advertise</a>
-          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 
-    <script src="../assets/js/jquery.min.js"></script>
-    <script src="../assets/js/popper.min.js"></script>
-    <script src="../assets/js/chart.js"></script>
-    <script src="../assets/js/toolkit.js"></script>
-    <script src="../assets/js/application.js"></script>
-    <script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/assets/js/vendor/popper.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars-intl@1.1.2/dist/handlebars-intl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="../static/js/chart.js"></script>
+    <script src="../static/js/toolkit.js"></script>
+    <script src="../static/js/application.js"></script>
+    <script type="text/javascript">
+      function showResults(results){
+        console.log(results);
+      }
+      function getConnectionId(id){
+          console.log('here');
+          console.log($('.'+id).attr('data-userid'));
+          var user_id = {user_id: $('.'+id).attr('data-userid')};
+          console.log(user_id)
+          $.post('/request_connection',user_id, showResults)
+      }
+      </script>
+    <script src="../static/js/home.js"></script>
+    <script type="text/javascript">
       // execute/clear BS loaders for docs
       $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
     </script>

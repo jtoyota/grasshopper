@@ -1,15 +1,66 @@
 $(document).ready(function(){
 
-      $(".users").on('click', function(evt) {
-      // remove classes from all
+    $(".users").on('click', function(evt) {
+    // remove classes from all
       $(".users").removeClass("active");
       // add class to the one we clicked
       $(this).addClass("active");
-      // stop the page from jumping to the top
-      return false;
-   });
+        if($('#find-users').hasClass('active')) {
+            alert('here!')
+        }//else if
+        else if($('#pending-requests').hasClass('active')) {
+
+            $('.content-placeholder').hide();
+            var source = $("#requests").html();
+            var template = Handlebars.compile(source);
+            var requests_data = []; //json file from server serialize function
+            data = pending_requests.slice(0,5)
+            console.log(data)
+            for (var i = 0; i < data.length; i++) {
+                requests_data.push ({
+                        'active_since': data[i]['mentee_info']['active_since'],
+                        'user_id': data[i]['mentee_info']['user_id'],
+                        'first_name': data[i]['mentee_info']['first_name'],
+                        'last_name': data[i]['mentee_info']['last_name'],
+                        'title' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['title'] : null),
+                        'company' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['company'] : null),
+                        'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                        'mentorship_id': data[i]['mentorship_id'],   
+                        'country': data[i]['mentee_info']['country'],
+                        'hobbies': data[i]['mentee_info']['hobbies'],
+                        'pets': data[i]['mentee_info']['pets'],
+                        'fun': data[i]['mentee_info']['fun_facts'],
+                        'summary':data[i]['mentee_info']['summary'],
+
+                });
+            }
+            var compiledHtml = template(requests_data)
+            console.log(compiledHtml)
+            // Add the compiled html to the page
+            $('.pending-placeholder').append(compiledHtml);  
+
+        }//else if pending
+    return false;
+  // stop the page from jumping to the top
+    });
+
+
+   var textAreas = document.getElementById('msg-placeholder');
+
+    Array.prototype.forEach.call(textAreas, function(elem) {
+        elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+    });   
+
 
     //convert user score to percentage to be displayed in progress bar
+    Handlebars.registerHelper('percent', function(score){
+      score = (score*100)/5
+      return new Handlebars.SafeString(
+      'style="width:'
+      + score
+      + '%"');
+    });
+
     Handlebars.registerHelper('percent', function(score){
       score = (score*100)/5
       return new Handlebars.SafeString(
@@ -40,16 +91,14 @@ $(document).ready(function(){
         async: false,
         success:function(data){
         pending_requests =data
-    }
+        }
     })
-    console.log('pending', pending_requests)
     //slice json to display results in page
     function sliceArray(page){
         return matches.slice(perPage*(page-1),(perPage*page))
-    }
+    }//slice array
 
-
-    if($('#user-matches').hasClass('active')) {
+          if($('#user-matches').hasClass('active')) {
         //if session with user matches is selected on profile page
         // var matches = getAllMatches()//create global variable to be accessed by function later 
         var count = 1; // page index for pagination
@@ -69,7 +118,6 @@ $(document).ready(function(){
         });
 
         function sortData(data){
-            console.log("here!")
             var source = $("#match-template").html();
             var template = Handlebars.compile(source);
             var user_data = []; 
@@ -98,40 +146,42 @@ $(document).ready(function(){
             // Add the compiled html to the page
             $('.content-placeholder').append(compiledHtml);    
         }    
-    }
+    }//if
 
-    if($('#find-users').hasClass('active')) {
-        alert('here!')
-    }
+    else if($('#find-users').hasClass('active')) {
+    alert('here!')
+}//else if
+    else if($('#pending-requests').hasClass('active')) {
 
-    if($('#pending-requests').hasClass('active')) {
-
-        // $('.content-placeholder').hide();
-        console.log('gere')
+        $('.content-placeholder').hide();
         var source = $("#requests").html();
         var template = Handlebars.compile(source);
         var requests_data = []; //json file from server serialize function
-        data = pending_requests.slice(0,3)
+        data = pending_requests.slice(0,5)
+        console.log(data)
         for (var i = 0; i < data.length; i++) {
-            request_data.push ({
+            requests_data.push ({
+                    'active_since': data[i]['mentee_info']['active_since'],
                     'user_id': data[i]['mentee_info']['user_id'],
                     'first_name': data[i]['mentee_info']['first_name'],
                     'last_name': data[i]['mentee_info']['last_name'],
                     'title' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['title'] : null),
                     'company' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['company'] : null),
                     'picture_url': 'http://loremflickr.com/320/240/dog?random',
-                    'mentorship_id': data[i]['mentorship_id']           
-            });
-        }
-        var compiledHtml = template(requests_data)
-        console.log(compiledHtml)
-        // Add the compiled html to the page
-        $('.pending-placeholder').append(compiledHtml);  
-  
-    }
+                    'mentorship_id': data[i]['mentorship_id'],   
+                    'country': data[i]['mentee_info']['country'],
+                    'hobbies': data[i]['mentee_info']['hobbies'],
+                    'pets': data[i]['mentee_info']['pets'],
+                    'fun': data[i]['mentee_info']['fun_facts'],
+                    'summary':data[i]['mentee_info']['summary'],
 
-         if($('#find-users').hasClass('active')) {
-        alert('here!')
+            });
     }
+    var compiledHtml = template(requests_data)
+    console.log(compiledHtml)
+    // Add the compiled html to the page
+    $('.pending-placeholder').append(compiledHtml);  
+
+}//else if pending
 
 });

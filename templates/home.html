@@ -73,7 +73,7 @@
       </li>
 
       <li class="nav-item d-md-none">
-        <a class="nav-link" href="../notifications/index.html">Notifications</a>
+        <a class="nav-link" href="/notifications">Notifications</a>
       </li>
       <li class="nav-item d-md-none">
         <a class="nav-link" data-action="growl">Do something awesome</a>
@@ -90,7 +90,7 @@
 
     <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-0 d-none d-md-flex">
       <li class="nav-item">
-        <a class="app-notifications nav-link" href="../notifications/index.html">
+        <a class="app-notifications nav-link" href="/notifications">
           <span class="icon icon-bell"></span>
         </a>
       </li>
@@ -425,7 +425,7 @@
                 {% else %}
                 Mentors
                 {% endif %}
-                <h6 class="my-0">3</h6>
+                <h6 class="my-0">6</h6>
               </a>
             </li>
           </ul>
@@ -447,28 +447,93 @@
 
        <div class="card d-md-block d-lg-block mb-4">
         <div class="card-body">
-          <h6 class="mb-3">Upcoming Events <small>· <a href="#">Edit</a></small></h6>
-          <a href="#">add event</a>
-          <div data-grid="images" data-target-height="150">
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_5.jpg">
+          <h6 class="mb-3">Upcoming Events <small>· <a href="#">View All</a></small></h6><br>
+          <h6 class="mt-0">Friday, October 24</h6>
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+            <div class="row">
+              <div class="col-6 col-md-4">6:30PM</div>
+              <div class="col-12 col-md-8">
+                <div class="media w-100">
+                <ul class="media-list">
+                  <li>
+                    <h5 class="media title"><small>Intro Meeting</small></h5>
+                  </li>
+                  <li>
+                    <p class='my-0'><small>with <a href='#'>Sandra Fernandes</a></small></p>
+                  </li>
+                  <ul class="avatar-list">
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src={{user['picture_url']}}>
+                    </li>
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src="../static/images/dog13.jpeg">
+                    </li>
+                  </ul>
+                </ul>
+              </div>
+              </div>
             </div>
-
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_6.jpg">
+            </li>
+          </ul>
+          <h6 class="mt-3">Tuesday, October 31</h6>
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+            <div class="row">
+            <div class="col-6 col-md-4">7:30AM</div>
+            <div class="col-12 col-md-8">
+            <div class="media w-100">
+              <ul class="media-list">
+                <li>
+                <h5 class="media title"><small>One-on-One</small></h5>
+                </li>
+                <li>
+                  <p class='my-0'><small>with <a href='#'>Mary Onara</a></small></p>
+                </li>
+                  <ul class="avatar-list">
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src={{user['picture_url']}}>
+                    </li>
+                    <li class="avatar-list-item">
+                      <img class="rounded-circle" src="../static/images/dog9.jpeg">
+                    </li>
+                  </ul>
+                </ul>
+              </div>
+              </div>
+              </div>
+              </li>
+            </ul>
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+            <div class="row">
+              <div class="col-6 col-md-4">3:30PM</div>
+              <div class="col-12 col-md-8">
+              <div class="media w-100">
+              <ul class="media-list">
+                <li>
+                  <h5 class="media title"><small>One-on-One</small></h5>
+                </li>
+                <li>
+                  <p class='my-0'><small>with <a href='#'>Paola Sondre</a></small></p>
+                </li>
+                <ul class="avatar-list">
+                  <li class="avatar-list-item">
+                    <img class="rounded-circle" src={{user['picture_url']}}>
+                  </li>
+                  <li class="avatar-list-item">
+                    <img class="rounded-circle" src="../static/images/dog12.jpeg">
+                  </li>
+                </ul>
+              </ul>
+              </div>
             </div>
-
-            <div>
-              <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_7.jpg">
-            </div>
-
-            <div>
-
           </div>
+            </li>
+          </ul>
           </div>
         </div>
-      </div>
-    </div>
+    </div>  
     <div class="col-lg-6">
 
       <ul class="list-group media-list media-list-stream mb-4">
@@ -476,19 +541,19 @@
         <li class="media list-group-item p-4">         
           <ul class="nav nav-pills">
             <li class="nav-item">
-              <a class="nav-link active" href="#">
+              <a class="nav-link feed active" href="#">
                 <span class="icon icon-chat"></span>
                 Discussions
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link feed" href="#">
                 <span class="icon icon-bell"></span>
                 Notifications
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link feed" href="#">
                 <span class="icon icon-users"></span>
                 {%if user['is_mentor'] %}
                 Mentees
@@ -563,7 +628,7 @@
         <li class="media list-group-item p-4">
           <img
             class="media-object d-flex align-self-start mr-3"
-            src="../static/images/dogs-in-glasses-1.png">
+            src="../static/images/dogs-in-glasses-1.jpg">
           <div class="media-body">
             <div class="media-heading">
               <small class="float-right text-muted">34 min</small>
@@ -601,7 +666,7 @@
 
       <div class="card mb-4 d-none d-lg-block">
         <div class="card-body">
-          <h6 class="mb-3">Suggested Mentees</h6>
+          <h6 class="mb-3">Suggested Mentee</h6>
           <div data-grid="images" data-target-height="150">
             <img class="media-object" data-width="640" data-height="640" data-action="zoom" src="../static/images/burn_everything.png">
           </div>
@@ -616,11 +681,11 @@
         <h6 class="mb-3">
             Connection requests
             <small>· <a href="/profile/pr">View All</a></small></h6>
-            <div class="content-placeholder"></div>
+            <div class="pending-placeholder"></div>
         </div>
         {% raw %}
       <!--Data will be inserted in its according place, replacing the brackets.-->
-            <script id="match-template" type="text/x-handlebars-template">
+        <script id="request-template" type="text/x-handlebars-template">
               {{#each this}}
               <ul id=connection_requests class="media-list media-list-stream">
                 <li class="media mb-2">
@@ -628,12 +693,12 @@
                     class="media-object d-flex align-self-start mr-3"
                     src={{picture_url}}>
                   <div class="media-body">
-                    <strong>{{ first_name }} {{ last_name }}</strong>
+                    <strong><small>{{ first_name }} {{ last_name }}</small></strong>
                     <span class="text-muted">
-                    </span>{{title}} at <a href="#">{{company}}</a>
+                    </span><small>{{title}} at <a href="#">{{company}}</small></a>
                     <div class="media-body-actions">
                       <button class="btn btn-outline-primary btn-sm {{@index}}" data-mentorship-id="{{mentorship_id}}" onclick="getConnectionId({{@index}})">
-                        <span class="icon icon-add-user"></span> Accept</button>
+                        <span class="icon icon-add-user"></span></small> Accept</small></button>
                     </div>
                   </div>
               </ul>
