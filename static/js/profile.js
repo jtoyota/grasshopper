@@ -24,7 +24,8 @@ $(document).ready(function(){
                         'last_name': data[i]['mentee_info']['last_name'],
                         'title' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['title'] : null),
                         'company' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['company'] : null),
-                        'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                        'picture_url': "../static/images/dog"+i+".jpg",
+                        'location': "../static/images/background"+i+".jpg",
                         'mentorship_id': data[i]['mentorship_id'],   
                         'country': data[i]['mentee_info']['country'],
                         'hobbies': data[i]['mentee_info']['hobbies'],
@@ -35,7 +36,6 @@ $(document).ready(function(){
                 });
             }
             var compiledHtml = template(requests_data)
-            console.log(compiledHtml)
             // Add the compiled html to the page
             $('.pending-placeholder').append(compiledHtml);  
 
@@ -53,6 +53,7 @@ $(document).ready(function(){
 
 
     //convert user score to percentage to be displayed in progress bar
+
     Handlebars.registerHelper('percent', function(score){
       score = (score*100)/5
       return new Handlebars.SafeString(
@@ -61,12 +62,12 @@ $(document).ready(function(){
       + '%"');
     });
 
-    Handlebars.registerHelper('percent', function(score){
-      score = (score*100)/5
+    Handlebars.registerHelper('getbackground', function(background){
+        console.log(background)
       return new Handlebars.SafeString(
-      'style="width:'
-      + score
-      + '%"');
+      '"background-image: url('
+      + background
+      + ');"');
     });
 
     //mentees - best matches
@@ -93,6 +94,9 @@ $(document).ready(function(){
         pending_requests =data
         }
     })
+
+    //dog image generatorß
+
     //slice json to display results in page
     function sliceArray(page){
         return matches.slice(perPage*(page-1),(perPage*page))
@@ -136,9 +140,10 @@ $(document).ready(function(){
                         'summary': data[i]['positions']['values'][0]['summary'],
                         'industry': data[i]['industry'],
                         'country': data[i]['country'],
-                        'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                        'picture_url': "../static/images/dog"+i+".jpg",
                         'hobbies': data[i]['hobbies'],
                         'pets': data[i]['pets'],
+                        'location': "../static/images/background"+i+".jpg"
 
                 });
             } 
@@ -167,7 +172,7 @@ $(document).ready(function(){
                     'last_name': data[i]['mentee_info']['last_name'],
                     'title' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['title'] : null),
                     'company' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['company'] : null),
-                    'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                    'picture_url': "../static/images/dog"+i+".jpg",
                     'mentorship_id': data[i]['mentorship_id'],   
                     'country': data[i]['mentee_info']['country'],
                     'hobbies': data[i]['mentee_info']['hobbies'],

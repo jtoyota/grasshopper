@@ -22,7 +22,7 @@ $(document).ready(function(){
                 'summary': data[i]['positions']['values'][0]['summary'],
                 'industry': data[i]['industry'],
                 'country': data[i]['country'],
-                'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                'picture_url': "../static/images/dog"+i+".jpg",
 
         });
     } 

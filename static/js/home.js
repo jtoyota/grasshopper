@@ -5,6 +5,9 @@ $(".feed").on('click', function(evt) {
     $(".feed").removeClass("active");
       // add class to the one we clicked
     $(this).addClass("active");
+    if $("events").hasClass('active'){
+        alert("here!")
+    }
     return false;
 });
 
@@ -20,7 +23,7 @@ $(".feed").on('click', function(evt) {
                     'last_name': data[i]['mentee_info']['last_name'],
                     'title' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['title'] : null),
                     'company' : (data[i]['mentee_info']['positions']['total'] > 0 ? data[i]['mentee_info']['positions']['values'][0]['company'] : null),
-                    'picture_url': 'http://loremflickr.com/320/240/dog?random',
+                    'picture_url': "../static/images/dog"+i+".jpg",
                     'mentorship_id': data[i]['mentorship_id']           
             });
 

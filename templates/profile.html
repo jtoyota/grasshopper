@@ -413,7 +413,7 @@
   <script id="match-template" type="text/x-handlebars-template">
       {{#each this}}
       <div class="card card-profile mb-4" id='matches-profile'>
-        <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
+        <div class="card-header" style={{#getbackground location}}{{/getbackground}};></div>
         <div class="card-body text-center">
           <a href="profile/pr">
             <img
@@ -516,7 +516,7 @@
   <script id="requests" type="text/x-handlebars-template">
          {{#each this}}
     <div class="card card-profile mb-4" id='matches-profile'>
-        <div class="card-header" style="background-image: url(../static/images/iceland.jpg);"></div>
+        <div class="card-header" style={{#getbackground location}}{{/getbackground}}></div>
         <div class="card-body text-center">
           <a href="profile/index.html">
             <img
