@@ -23,8 +23,7 @@
     <link href="../static/css/application.css" rel="stylesheet">
 
     <style>
-      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
-      /* this chunk of css is not part of the toolkit :) */
+
       body {
         width: 1px;
         min-width: 100%;
@@ -581,7 +580,7 @@
 
             <div class="media-body-inline-grid" data-grid="images">
               <div style="display: none">
-                <img data-action="zoom" data-width="1050" data-height="700" src="../static/images/article1.png">
+                <img data-action="zoom" data-width="1050" data-height="700" src="../static/images/article1.jpg">
               </div>
             </div>
 
@@ -611,12 +610,12 @@
         <li class="media list-group-item p-4">
           <img
             class="media-object d-flex align-self-start mr-3"
-            src="assets/img/avatar-fat.jpg">
+            src="../static/images/dog9.jpg">
           <div class="media-body">
             <div class="media-body-text">
               <div class="media-heading">
                 <small class="float-right text-muted">12 min</small>
-                <h6>Sandra</h6>
+                <h6>Sandra Fernandes</h6>
               </div>
               <p>
                 Donec id elit non mi porta gravida at eget metus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -632,7 +631,7 @@
           <div class="media-body">
             <div class="media-heading">
               <small class="float-right text-muted">34 min</small>
-              <h6>Balloonicorn</h6>
+              <h6>Chris Trudeau</h6>
             </div>
 
             <p>
@@ -647,7 +646,7 @@
               <li class="media">
                 <img
                   class="media-object d-flex align-self-start mr-3"
-                  src="assets/img/avatar-dhg.png">
+                  src={{user['picture_url']}}>
                 <div class="media-body">
                   <strong>{{user['first_name']}} {{user['last_name']}} </strong>
                   Donec id elit non mi porta gravida at eget metus. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis.
@@ -679,7 +678,7 @@
         <div class="card-body">
         <h6 class="mb-3">
             Connection requests
-            <small>· <a href="/profile/pr">View All</a></small></h6>
+            <small>· <a href="/profile/pr">View all</a></small></h6>
             <div class="pending-placeholder"></div>
         </div>
         {% raw %}

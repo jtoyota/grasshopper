@@ -10,12 +10,19 @@ $(document).ready(function(){
         }//else if
         else if($('#pending-requests').hasClass('active')) {
 
+            Handlebars.registerHelper('getbackground', function(background){
+                console.log(background)
+                return new Handlebars.SafeString(
+                '"background-image: url('
+                + background
+                + ');"');
+            });
+            //get from server
             $('.content-placeholder').hide();
             var source = $("#requests").html();
             var template = Handlebars.compile(source);
             var requests_data = []; //json file from server serialize function
             data = pending_requests.slice(0,5)
-            console.log(data)
             for (var i = 0; i < data.length; i++) {
                 requests_data.push ({
                         'active_since': data[i]['mentee_info']['active_since'],
@@ -157,13 +164,11 @@ $(document).ready(function(){
     alert('here!')
 }//else if
     else if($('#pending-requests').hasClass('active')) {
-
         $('.content-placeholder').hide();
         var source = $("#requests").html();
         var template = Handlebars.compile(source);
         var requests_data = []; //json file from server serialize function
         data = pending_requests.slice(0,5)
-        console.log(data)
         for (var i = 0; i < data.length; i++) {
             requests_data.push ({
                     'active_since': data[i]['mentee_info']['active_since'],

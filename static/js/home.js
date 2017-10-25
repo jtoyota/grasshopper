@@ -1,15 +1,16 @@
 $(document).ready(function(){
-
+$(".evts").hide();
 $(".feed").on('click', function(evt) {
     // remove classes from all
     $(".feed").removeClass("active");
       // add class to the one we clicked
     $(this).addClass("active");
-    if $("events").hasClass('active'){
-        alert("here!")
-    }
+    if ($("#events").hasClass('active')){
+        $(".disc").hide();
+        }
     return false;
 });
+
 
     $.get('/connection_requests/pending_requests.json',function(data){
         var source = $("#request-template").html();
@@ -26,11 +27,9 @@ $(".feed").on('click', function(evt) {
                     'picture_url': "../static/images/dog"+i+".jpg",
                     'mentorship_id': data[i]['mentorship_id']           
             });
-
-        console.log(user_data)
         }
         var compiledHtml = template(user_data)
-        console.log(compiledHtml)
+ 
         // Add the compiled html to the page
         $('.pending-placeholder').append(compiledHtml);  
 
