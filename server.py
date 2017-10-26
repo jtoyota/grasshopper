@@ -162,8 +162,8 @@ def get_hobbies_and_pets():
 @app.route('/home')
 def main_page():
     """Render user's main page."""
-    user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
-    session['user_id'] = user_id
+    user_id = session['user_id']
+    user = User.query.get(user_id)
     user = User.query.get(user_id).serialize()
 
     return render_template("home.html", user=user)
@@ -249,10 +249,9 @@ def page_not_found(error):
 @app.route('/profile/<current>')
 def profile(current='bm'):
     """Render user profile's main page."""
-    user_id = User.query.filter_by(email='bichoffe.marina@gmail.com').one().user_id
     session['user_id'] = user_id
+    user_id = User.query.get(user_id)
     user = User.query.get(user_id).serialize()
-
     return render_template("profile.html", user=user, current=current)
 
 
@@ -268,7 +267,6 @@ def show_linkedin_registration():
 @app.route('/search')
 def search_for_users():
     pass
-
 
 
 
