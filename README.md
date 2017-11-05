@@ -28,9 +28,9 @@ __User profile__
 
 See the best matches ordered by similarity to your expertise or advice preferences
 Option to send a message to a suggested match before you send a connect request
+
 ![send message to prospect](https://media.giphy.com/media/l2QDQHBJ4b57Fnlks/giphy.gif)
 <br/><br/><br/>
-
 Search for users on the database
 
 See who sent you a connection request
