@@ -249,8 +249,7 @@ def page_not_found(error):
 @app.route('/profile/<current>')
 def profile(current='bm'):
     """Render user profile's main page."""
-    session['user_id'] = user_id
-    user_id = User.query.get(user_id)
+    user_id = session['user_id']
     user = User.query.get(user_id).serialize()
     return render_template("profile.html", user=user, current=current)
 
@@ -501,7 +500,7 @@ def get_matches():
     user = User.query.get(session['user_id'])
     matches = user.find_matches()
     user_comp = []
-    for match in matches[:20]:
+    for match in matches[:20]: #for demo purposes, show only first 20 matches
         user_comp.append(match[1].serialize())
 
     return user_comp
