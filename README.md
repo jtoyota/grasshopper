@@ -19,34 +19,48 @@ __APIs:__ LinkedIn, Google Calendar <br/>
 
 * Mentor/Mentee user interfaces
 
+<img src="static/readme-gifs/splash-page.png" alt="splash" width='654.75' height='444.45'>
+
 * During the sign up process, users answer a few quick questions, which will be used to match them with mentors or mentees with similar preferences.
 
+<img src="static/readme-gifs/questionnaire.png" alt="questionnaire" width='654.75' height='444.45'>
 
 * Sign up with just one click via LinkedIn API
 
 __User profile__
 
-See the best matches ordered by similarity to your expertise or advice preferences
-Option to send a message to a suggested match before you send a connect request
+* See the best matches ordered by similarity to your expertise or advice preferences
 
-![send message to prospect](https://media.giphy.com/media/l2QDQHBJ4b57Fnlks/giphy.gif)
+<img src="static/readme-gifs/scrolling-users.gif" alt="scroll users" width='654.75' height='444.45'>
 <br/><br/><br/>
-Search for users on the database
+* Option to send a message to a suggested match before you send a connect request
 
-See who sent you a connection request
+<img src="static/readme-gifs/sending-message-final.gif" alt="send message" width='654.75' height='444.45'>
+<br/><br/><br/>
+* Search for users on the database
+
+* See who sent you a connection request
+
+<img src="static/readme-gifs/view-connections-high.gif" alt="pending requests" width='654.75' height='444.45'>
+<br/><br/><br/>
+
+
 
 
 __Home__
 
-See future events
+* See future events
 
-Current feed
+* Current feed
 
-Mentors/Mentees
+<img src="static/readme-gifs/home.gif" alt="home" width='654.75' height='444.45'>
+<br/><br/><br/>
+* Mentors/Mentees
 
 __Notifications__
 
-Latest activities from user and connections
+* Latest activities from user and connections
+<img src="static/readme-gifs/notifications.gif" alt="notifications" width='654.75' height='444.45'>
 
 __Messages__
 
